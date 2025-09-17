@@ -1,57 +1,74 @@
-//src/app.jsx
+// src/App.jsx
 
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css";
-import ProductGrid from "./components/ProductGrid";
 import CartDrawer from "./components/CartDrawer";
+
+
+// Pages
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import NotFound from "./pages/NotFound";
+
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const[isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
 
-  // Handle adding product to cart
-  const handleAddToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
+ // Handle adding product to cart
+ const handleAddToCart = (product) => {
+  setCartItems((prev) => [...prev, product]);
+};
 
-  };
 
-  // Handle remmoving cart products
-  const handleRemoveFromCart = (productId) => {
+   // Handle removing cart products
+   const handleRemoveFromCart = (productId) => {
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-blue-500 to-purple-600">
-      {/* Pass cart count to Navbar */}
-      <Navbar cartCount={cartItems.length}
-      onCartClick={() => setIsCartOpen(true)}
-      />
+    <Router>
+      <div
+        className="min-h-screen flex flex-col
+        bg-gradient-to-r from-blue-500 to-purple-600
+        dark:from-gray-900 dark:to-gray-800
+        text-gray-900 dark:text-gray-100
+        transition-colors duration-500 ease-in-out"
+      >
+        {/* Pass cart count to Navbar */}
+        <Navbar
+          cartCount={cartItems.length}
+          onCartClick={() => setIsCartOpen(true)}
+        />
 
+      {/* Main content area */}
       <main className="flex-grow p-6">
-        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-3xl font-semibold text-gray-800">
-            Welcome to the E-Shop
-          </h2>
-          <p className="mt-4 text-gray-600">
-            Browse our products and add them to your cart. Shop with Confidence,
-            Elegance, and Style!
-          </p>
+          <Routes>
+            {/* Home Page */}
+            <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
 
-          {/* Pass add-to-cart handler to ProductGrid */}
-          <ProductGrid onAddToCart={handleAddToCart} />
-        </div>
-      </main>
+            {/* Other Pages */}
+            <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
+            <Route path="/cart" element={<Cart cartItems={cartItems} />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-      {/* Cart Drawer */}
+      {/* Cart Drawer (global, not tied to one page) */}
       <CartDrawer
-      isOpen={isCartOpen}
-      onClose={() => setIsCartOpen(flase)}
-      cartItems={cartItems}
-      onRemoveFromCart={handleRemoveFromCart}
-      />
-    </div>
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          cartItems={cartItems}
+          onRemoveFromCart={handleRemoveFromCart}
+        />
+      </div>
+    </Router>
   );
 }
 

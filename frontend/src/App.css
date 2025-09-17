@@ -1,4 +1,37 @@
-#root {
+/* src/App.css */
+
+/* Smoothe color transtition */
+
+html, body {
+  @apply transition-colors duration-500 ease-in-out;
+  animation: fade 0.5s ease-in-out;
+}
+
+/* fade animation (only when class is applied */
+
+.theme-fade {
+  animation: fade 0.5s ease-in-out;
+}
+
+/* Keyframes for fade */
+@keyframes fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+  }
+
+  @keyframes fadeScale {
+    0% { opacity: 0;
+    transofrm: scale(0.98); /* slight shrink */
+  }
+  100% {
+    opacity: 1;
+    transofrm: scale(1); /* back to normal */
+  }
+  }
+
+
+
+.card {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
