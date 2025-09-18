@@ -2,8 +2,11 @@
 
 
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveFromCart }) {
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+
   return (
     <>
       {/* Overlay */}
@@ -17,9 +20,10 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveFromCar
       {/* Drawer */}
       <div
         className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-50 transform transition-transform duration-300
-        ${isOpen ? "translate-x-0" : "translate-x-full"}
+          ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
+        {/* Header */}
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-semibold">Your Cart</h2>
           <button
@@ -31,9 +35,9 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveFromCar
         </div>
 
         {/* Cart Items */}
-        <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-8rem)]">
+        <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-10rem)] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {cartItems.length === 0 ? (
-            <p className="text-gray-500">Your cart is empty</p>
+            <p className="text-gray-500 text-center mt-6">Your cart is empty</p>
           ) : (
             cartItems.map((item, index) => (
               <div
@@ -41,12 +45,8 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveFromCar
                 className="flex items-center justify-between border-b pb-2"
               >
                 <div>
-                  <h3 className="text-sm font-medium text-gray-800">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    ${item.price.toFixed(2)}
-                  </p>
+                  <h3 className="text-sm font-medium text-gray-800">{item.name}</h3>
+                  <p className="text-sm text-gray-600">${item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <img
@@ -68,9 +68,19 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onRemoveFromCar
 
         {/* Footer */}
         <div className="p-4 border-t">
-          <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-medium text-gray-800">Total:</span>
+            <span className="font-semibold text-gray-900">
+              ${totalPrice.toFixed(2)}
+            </span>
+          </div>
+          <Link
+            to="/checkout"
+            className="w-full block text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+            onClick={onClose} // Close drawer when navigating
+          >
             Checkout
-          </button>
+          </Link>
         </div>
       </div>
     </>

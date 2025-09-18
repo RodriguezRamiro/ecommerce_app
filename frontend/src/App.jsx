@@ -58,7 +58,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </main>
+      </main>
 
       {/* Cart Drawer (global, not tied to one page) */}
       <CartDrawer

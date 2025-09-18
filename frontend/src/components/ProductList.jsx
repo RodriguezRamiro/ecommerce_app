@@ -39,7 +39,7 @@ const sampleProducts = [
   export default function ProductList() {
     return (
         <div className='container mx-auto p-6'>
-            <h2 className='text-2xl front-bold mb-6'> Our Products</h2>
+            <h2 className='text-2xl font-bold mb-6'> Our Products</h2>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
                 {sampleProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />

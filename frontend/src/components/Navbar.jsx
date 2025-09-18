@@ -1,5 +1,7 @@
 // frontend/src/components/Navbar.jsx
+
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar({ cartCount, onCartClick }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,31 +9,14 @@ export default function Navbar({ cartCount, onCartClick }) {
     () => localStorage.getItem("theme") === "dark"
   );
 
+  // Apply dark mode on mount and on toggle
   useEffect(() => {
     const root = document.documentElement;
-
-    // Add fade class for transition
-    root.classList.add("theme-fade");
-
     if (darkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'light');
-    }
-
-    //Remove the fade class after animation
-    const timeout = setTimeout(() => {
-      root.classList.remove('theme-fade');
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [darkMode]);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
@@ -42,28 +27,41 @@ export default function Navbar({ cartCount, onCartClick }) {
         <div className="px-6 py-4 flex justify-between items-center">
           {/* Brand Logo */}
           <h1 className="text-2xl font-bold tracking-wide">
-            E-Shop (structural phase)
+            E-Shop
           </h1>
 
-          {/* Navigation Links */}
+          {/* Desktop Navigation */}
           <ul className="hidden md:flex space-x-6">
-            <li><a href="#" className="hover:text-indigo-400 transition">Home</a></li>
-            <li><a href="#" className="hover:text-indigo-400 transition">Products</a></li>
-            <li><a href="#" className="hover:text-indigo-400 transition">About</a></li>
-            <li><a href="#" className="hover:text-indigo-400 transition">Contact</a></li>
+            <li>
+              <Link to="/" className="hover:text-indigo-400 transition">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/shop" className="hover:text-indigo-400 transition">
+                Products
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="hover:text-indigo-400 transition">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-indigo-400 transition">
+                Contact
+              </Link>
+            </li>
           </ul>
 
+          {/* Right side buttons */}
           <div className="flex items-center space-x-3">
             {/* Dark Mode Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-2 rounded bg-gray-700 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 transition-colors duration-300"
             >
-              {darkMode ? (
-                <span role="img" aria-label="sun">🌞</span>
-              ) : (
-                <span role="img" aria-label="moon">🌙</span>
-              )}
+              {darkMode ? "🌞" : "🌙"}
             </button>
 
             {/* Cart */}
@@ -77,7 +75,7 @@ export default function Navbar({ cartCount, onCartClick }) {
               </span>
             </button>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <button
               className="md:hidden p-2 rounded hover:bg-gray-800 focus:outline-none"
               onClick={() => setIsOpen(!isOpen)}
@@ -90,9 +88,19 @@ export default function Navbar({ cartCount, onCartClick }) {
                 stroke="currentColor"
               >
                 {isOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -103,10 +111,18 @@ export default function Navbar({ cartCount, onCartClick }) {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-2 bg-gray-800 dark:bg-gray-700 transition-colors duration-300">
-          <a href="#" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">Home</a>
-          <a href="#" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">Products</a>
-          <a href="#" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">About</a>
-          <a href="#" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">Contact</a>
+          <Link to="/" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+            Home
+          </Link>
+          <Link to="/shop" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+            Products
+          </Link>
+          <Link to="/about" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+            About
+          </Link>
+          <Link to="/contact" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+            Contact
+          </Link>
         </div>
       )}
     </nav>
