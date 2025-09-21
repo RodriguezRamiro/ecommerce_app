@@ -1,13 +1,14 @@
 // frontend/src/components/Navbar.jsx
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar({ cartCount, onCartClick }) {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(
     () => localStorage.getItem("theme") === "dark"
   );
+    const location = useLocation();
 
   // Apply dark mode on mount and on toggle
   useEffect(() => {
@@ -21,41 +22,50 @@ export default function Navbar({ cartCount, onCartClick }) {
     }
   }, [darkMode]);
 
+  const isActive = (path) =>
+  location.pathname === path
+  ? "text-indigo_400 font-semibold"
+  : "hover:text-indigo-400";
+
   return (
-    <nav className="bg-gray-900 text-white shadow-md dark:bg-gray-800 transition-colors duration-300">
+    <nav className="sticky top-0 z-50 bg-gray-900/90 background-blur-md text-white shadow-md dark:bg-gray-800/90 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8">
         <div className="px-6 py-4 flex justify-between items-center">
           {/* Brand Logo */}
-          <h1 className="text-2xl font-bold tracking-wide">
+          <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-wide bg-gardient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+          >
             E-Shop
-          </h1>
+          </Link>
+
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-6">
+          <ul className="hidden md:flex space-x-8 text-lg">
             <li>
-              <Link to="/" className="hover:text-indigo-400 transition">
+              <Link to="/" className={isActive("/")}>
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/shop" className="hover:text-indigo-400 transition">
+              <Link to="/shop" className={isActive("/shop")}>
                 Products
               </Link>
             </li>
             <li>
-              <Link to="/about" className="hover:text-indigo-400 transition">
+              <Link to="/about" className={isActive("/about")}>
                 About
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-indigo-400 transition">
+              <Link to="/contact" className={isActive("/contact")}>
                 Contact
               </Link>
             </li>
           </ul>
 
           {/* Right side buttons */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             {/* Dark Mode Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -66,13 +76,15 @@ export default function Navbar({ cartCount, onCartClick }) {
 
             {/* Cart */}
             <button
-              className="relative bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="relative bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
               onClick={onCartClick}
             >
               Cart
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+              {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
                 {cartCount}
               </span>
+              )}
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -110,17 +122,24 @@ export default function Navbar({ cartCount, onCartClick }) {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden px-2 pt-2 pb-3 space-y-2 bg-gray-800 dark:bg-gray-700 transition-colors duration-300">
-          <Link to="/" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+        <div className="md:hidden px-2 pt-2 pb-3 space-y-2 bg-gray-800 dark:bg-gray-700 shadow-md">
+          <Link to="/" className={`block px-3 py-2 rounded-md ${isActive("/")}`}>
             Home
           </Link>
-          <Link to="/shop" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+          <Link
+          to="/shop"
+          className={`block px-3 py-2 rounded-md ${isActive("/shop")}`}>
             Products
           </Link>
-          <Link to="/about" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+          <Link
+          to="/about"
+          className={`block px-3 py-2 rounded-md ${isActive("/about")}`}>
             About
           </Link>
-          <Link to="/contact" className="block text-gray-300 hover:text-white px-3 py-2 rounded-md">
+          <Link
+          to="/contact"
+          className={`block px-3 py-2 rounded-md ${isActive("/conctact")}`}
+          >
             Contact
           </Link>
         </div>
