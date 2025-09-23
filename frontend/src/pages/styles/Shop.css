@@ -1,0 +1,85 @@
+/* src/pages/Shop.css */
+
+.shop-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .shop-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .shop-title {
+    font-size: 48px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ec4899, #facc15);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .shop-subtitle {
+    margin-top: 16px;
+    font-size: 18px;
+    color: #4b5563;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 16px;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: #e5e7eb;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .filter-button:hover {
+    background-color: #d1d5db;
+  }
+
+  .sort-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+
+  .shop-cta {
+    text-align: center;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #10b981, #14b8a6);
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .cta-button:hover {
+    transform: scale(1.05);
+  }

@@ -2,13 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import "./styles/Navbar.css";
 
-export default function Navbar({ cartCount, onCartClick }) {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(
     () => localStorage.getItem("theme") === "dark"
   );
-    const location = useLocation();
+  const location = useLocation();
+
+    // Get cart state + actions from context
+    const { cart, cartCount } = useCart();
 
   // Apply dark mode on mount and on toggle
   useEffect(() => {
@@ -23,123 +28,80 @@ export default function Navbar({ cartCount, onCartClick }) {
   }, [darkMode]);
 
   const isActive = (path) =>
-  location.pathname === path
-  ? "text-indigo_400 font-semibold"
-  : "hover:text-indigo-400";
+  location.pathname === path ? "nav-link active" : "nav-link";
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900/90 background-blur-md text-white shadow-md dark:bg-gray-800/90 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8">
-        <div className="px-6 py-4 flex justify-between items-center">
-          {/* Brand Logo */}
-          <Link
-          to="/"
-          className="text-2xl font-extrabold tracking-wide bg-gardient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+    <nav className="navbar">
+      <div className="navbar-container">
+        {/* Brand Logo */}
+        <Link to="/" className="logo">
+          E-Shop
+        </Link>
+
+        {/* Desktop Navigation */}
+        <ul className="nav-links">
+          <li>
+            <Link to="/" className={isActive("/")}>
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/shop" className={isActive("/shop")}>
+              Products
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" className={isActive("/about")}>
+              About
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" className={isActive("/contact")}>
+              Contact
+            </Link>
+          </li>
+        </ul>
+
+        {/* Right side buttons */}
+        <div className="nav-actions">
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="dark-toggle"
           >
-            E-Shop
-          </Link>
+            {darkMode ? "🌞" : "🌙"}
+          </button>
 
+          {/* Cart */}
+          <button className="cart-btn" onClick={() => setIsOpen(true)}>
+            Cart
+            {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+          </button>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-8 text-lg">
-            <li>
-              <Link to="/" className={isActive("/")}>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/shop" className={isActive("/shop")}>
-                Products
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className={isActive("/about")}>
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className={isActive("/contact")}>
-                Contact
-              </Link>
-            </li>
-          </ul>
-
-          {/* Right side buttons */}
-          <div className="flex items-center space-x-4">
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded bg-gray-700 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 transition-colors duration-300"
-            >
-              {darkMode ? "🌞" : "🌙"}
-            </button>
-
-            {/* Cart */}
-            <button
-              className="relative bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-              onClick={onCartClick}
-            >
-              Cart
-              {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
-                {cartCount}
-              </span>
-              )}
-            </button>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              className="md:hidden p-2 rounded hover:bg-gray-800 focus:outline-none"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
+          {/* Mobile Menu Toggle */}
+          <button
+            className="mobile-toggle"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            {isOpen ? "✖" : "☰"}
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden px-2 pt-2 pb-3 space-y-2 bg-gray-800 dark:bg-gray-700 shadow-md">
-          <Link to="/" className={`block px-3 py-2 rounded-md ${isActive("/")}`}>
+        <div className="mobile-menu">
+          <Link to="/" className={isActive("/")}>
             Home
           </Link>
-          <Link
-          to="/shop"
-          className={`block px-3 py-2 rounded-md ${isActive("/shop")}`}>
+          <Link to="/shop" className={isActive("/shop")}>
             Products
           </Link>
-          <Link
-          to="/about"
-          className={`block px-3 py-2 rounded-md ${isActive("/about")}`}>
+          <Link to="/about" className={isActive("/about")}>
             About
           </Link>
-          <Link
-          to="/contact"
-          className={`block px-3 py-2 rounded-md ${isActive("/conctact")}`}
-          >
+          <Link to="/contact" className={isActive("/contact")}>
             Contact
           </Link>
         </div>

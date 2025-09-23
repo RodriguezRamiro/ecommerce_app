@@ -1,7 +1,9 @@
 //frontend/src/components/ProductGrid.jsx
 
 
+import React from "react";
 import ProductCard from "./ProductCard";
+import "./styles/ProductGrid.css";
 
 const mockProducts = [
   {
@@ -36,14 +38,17 @@ const mockProducts = [
 
 export default function ProductGrid({ onAddToCart }) {
   return (
-    <section className="p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Products</h2>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <section className="product-grid-section">
+      <h2 className="product-grid-title">Products</h2>
+      <div className="product-grid">
         {mockProducts.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={onAddToCart}
+          />
         ))}
       </div>
     </section>
   );
 }
-

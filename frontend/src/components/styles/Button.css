@@ -1,0 +1,44 @@
+/* frontend/src/components/Button.css */
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Variants */
+  .btn-primary {
+    background: linear-gradient(to right, #3b82f6, #8b5cf6); /* blue → purple */
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(to right, #2563eb, #3b82f6); /* deeper blue */
+  }
+
+  .btn-success {
+    background: linear-gradient(to right, #22c55e, #14b8a6); /* green → teal */
+    color: #fff;
+  }
+
+  .btn-success:hover {
+    background: linear-gradient(to right, #0d9488, #22c55e);
+  }
+
+  .btn-neutral {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  .btn-neutral:hover {
+    background: #d1d5db;
+  }
