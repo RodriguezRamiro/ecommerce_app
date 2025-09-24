@@ -39,6 +39,10 @@ function App() {
     }
 });
 
+const [darkMode, setDarkMode] = useState(
+  () => localStorage.getItem("theme") === "dark"
+);
+
 setIsCartOpen(true); //auto-open cart when adding
 
  };
@@ -67,8 +71,10 @@ setIsCartOpen(true); //auto-open cart when adding
         {/* Pass cart count to Navbar */}
         <Navbar
           cartCount={cartItems.length}
-          onCartClick={() => setIsCartOpen(true)}
-        />
+          onToggleCart={() => setIsCartOpen(true)}
+          darkMode={darkMode}
+          setDarkMode={darkMode}
+          />
 
       {/* Main content area */}
       <main className="main-content">

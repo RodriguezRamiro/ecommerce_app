@@ -5,12 +5,9 @@ import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./styles/Navbar.css";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("theme") === "dark"
-  );
-  const location = useLocation();
+export default function Navbar(onToggleCart, darkMode, setDarkMode) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+    const location = useLocation();
 
     // Get cart state + actions from context
     const { cart, cartCount } = useCart();
@@ -73,7 +70,7 @@ export default function Navbar() {
           </button>
 
           {/* Cart */}
-          <button className="cart-btn" onClick={() => setIsOpen(true)}>
+          <button className="cart-btn" onClick={onToggleCart}>
             Cart
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
@@ -81,16 +78,16 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             className="mobile-toggle"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? "✖" : "☰"}
+            {mobileOpen ? "✖" : "☰"}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
+      {mobileOpen && (
         <div className="mobile-menu">
           <Link to="/" className={isActive("/")}>
             Home

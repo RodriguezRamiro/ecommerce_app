@@ -22,6 +22,13 @@ export default function ProductCard({ product, onAddToCart }) {
 
   return (
     <div className="product-card">
+      {/* Badge for featured products */}
+      {product.badge && (
+        <div className={`badge ${product.badge.toLowerCase()}`}>
+        {product.badge}
+        </div>
+      )}
+      
       {/* Product Image */}
       <img
         src={src}
