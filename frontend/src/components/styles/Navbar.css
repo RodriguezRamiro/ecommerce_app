@@ -59,18 +59,42 @@
     gap: 12px;
   }
 
-  .dark-toggle {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
+.app-container.ligth-mode .navbar {
+    background: #ffffff;
+    color: #222;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.app-container.light-mode .nav-link {
+    color: #444;
+}
+
+.app-container.light-mode .navv-link:hover {
+    color: #4f9cff;
+}
+
+.app-container.light-mode .dark-toggle {
+    background : #eee;
+    color: #222;
+}
+
+.app-container.light-mode .dark-toggle:hover {
+    background: #ddd;
+}
+
+.app-container.dark-mode .navbar {
+    background: #222;
+    color: white;
+}
+
+.app-container.dark-mode .nav-link {
+    color: #ccc;
+}
+
+.app-container.dark-mode .dark-toggle {
     background: #444;
     color: white;
-    cursor: pointer;
-  }
-
-  .dark-toggle:hover {
-    background: #555;
-  }
+}
 
   .cart-btn {
     position: relative;

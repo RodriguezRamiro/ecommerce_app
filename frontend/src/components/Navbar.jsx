@@ -5,12 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./styles/Navbar.css";
 
-export default function Navbar(onToggleCart, darkMode, setDarkMode) {
+export default function Navbar({ onToggleCart, darkMode, setDarkMode, cartCount }) {
   const [mobileOpen, setMobileOpen] = useState(false);
     const location = useLocation();
 
-    // Get cart state + actions from context
-    const { cart, cartCount } = useCart();
 
   // Apply dark mode on mount and on toggle
   useEffect(() => {
@@ -62,11 +60,10 @@ export default function Navbar(onToggleCart, darkMode, setDarkMode) {
         {/* Right side buttons */}
         <div className="nav-actions">
           {/* Dark Mode Toggle */}
-          <button
+          <button className="dark-toggle"
             onClick={() => setDarkMode(!darkMode)}
-            className="dark-toggle"
           >
-            {darkMode ? "🌞" : "🌙"}
+            {darkMode ? "Light Mode" : "Dark Mode"}
           </button>
 
           {/* Cart */}

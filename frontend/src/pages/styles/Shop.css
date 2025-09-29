@@ -51,6 +51,12 @@
     cursor: pointer;
     transition: background 0.2s ease;
   }
+  .filter-button.active {
+    background: #4f9cff;
+    color: white;
+    font-weight: bold;
+  }
+
 
   .filter-button:hover {
     background-color: #d1d5db;

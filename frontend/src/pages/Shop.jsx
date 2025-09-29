@@ -1,6 +1,6 @@
 //src/pages/Shop.jsx
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import products from "../data/products";
@@ -8,6 +8,31 @@ import ProductList from "../components/ProductList";
 import "./styles/Shop.css";
 
 export default function Shop({ onAddToCart }) {
+
+    // State for filters and sorting
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [sortOption, setSortOption] = useState(''); // "", "lowToHigh", "highToLow"
+
+    // Derived product list
+    const displayProducts = useMemo(() => {
+        let filtered = [...products];
+
+    // Filtered by category
+        if (selectedCategory !== 'All') {
+            filtered = filtered.filter(
+                (p) => p.category.toLowerCase() === selectedCategory.toLowerCase()
+            );
+        }
+    // Sorted by Price
+    if (sortOption === 'lowToHigh') {
+        filtered.sort((a, b) => a.price - b.price);
+    } else if (sortOption === 'highToLow')  {
+        filtered.sort((a, b) => b.price - a.price);
+    }
+    return filtered;
+    }, [selectedCategory, sortOption]);
+
+
     return (
       <div className="shop-container">
         {/* Title + Subtitle */}
@@ -28,19 +53,31 @@ export default function Shop({ onAddToCart }) {
         {/* Filter + Sort Bar */}
         <div className="filter-bar">
           <div className="filter-buttons">
-            <button className="filter-button">All</button>
-            <button className="filter-button">Accessories</button>
-            <button className="filter-button">Apparel</button>
+            {['All', 'Accessories', 'Apparel', 'Footwear'].map((cat) => (
+                <button
+                key={cat}
+                className={`filter-button ${selectedCategory === cat ? 'active' : ""
+            }`}
+            onClick={() => setSelectedCategory(cat)}
+            >
+                {cat}
+            </button>
+            ))}
           </div>
-          <select className="sort-select">
-            <option>Sort by</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
+
+          <select className="sort-select"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            >
+            <option value="">Sort By</option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
           </select>
         </div>
 
         {/* Product Grid */}
-        <ProductList products={products} onAddToCart={onAddToCart} title={null} />
+        <ProductList
+        products={displayProducts} onAddToCart={onAddToCart} title={null} />
 
         {/* CTA */}
         <div className="shop-cta">

@@ -10,7 +10,9 @@ import Button from "../components/Button";
 import "./styles/Home.css";
 
 export default function Home({ onAddToCart }) {
-  const featured = products.filter((p) => p.featured);
+    const featured = products.filter(
+        (p) => p.badge && p.badge.toLowerCase() === "featured"
+      );
   const categories = [...new Set(products.map((p) => p.category))];
 
   return (

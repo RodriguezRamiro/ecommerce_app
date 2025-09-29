@@ -1,6 +1,7 @@
 // frontend/src/components/ProductCard.jsx
 
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import "./styles/ProductCard.css";
 
 // Inline SVG fallback
@@ -25,22 +26,26 @@ export default function ProductCard({ product, onAddToCart }) {
       {/* Badge for featured products */}
       {product.badge && (
         <div className={`badge ${product.badge.toLowerCase()}`}>
-        {product.badge}
+          {product.badge}
         </div>
       )}
-      
-      {/* Product Image */}
-      <img
-        src={src}
-        alt={product.name ? `${product.name} product image` : "Product image"}
-        className="product-image"
-        onError={() => setSrc(fallbackSvg)}
-      />
 
-      {/* Product Details */}
+
+
+      {/* Product Image */}
+      <Link to={`/product/${product.id}`}>
+      <img
+          src={src}
+          alt={product.name || "Unnamed product"}
+          onError={() => setSrc(fallbackSvg)}
+        /> {/* Fallback on error */}
+      </Link>
+
+      {/* Title */}
       <h3 className="product-title">
-        {product.name || "Unnamed Product"}
+        <Link to={`/product/${product.id}`}>{product.name}</Link>
       </h3>
+
 
       {/* Product description */}
       <p className="product-description">
