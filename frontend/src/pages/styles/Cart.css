@@ -30,7 +30,7 @@
     background: #ffffff;
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .cart-items {
@@ -45,6 +45,10 @@
     justify-content: space-between;
     padding: 12px 0;
     font-weight: 500;
+  }
+
+  .cart-item:hover {
+    background: #f9fafb;
   }
 
   .item-price {
@@ -62,7 +66,12 @@
   .checkout-container {
     margin-top: 24px;
     text-align: right;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
   }
+
 
   .checkout-btn {
     display: inline-block;
@@ -79,3 +88,21 @@
     background: #2563eb;
     transform: scale(1.05);
   }
+
+
+.store-locator-link {
+  display: inline-block;
+  background: linear-gradient(90deg, #3b82f6, #a78bfa);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+  margin-left: 16px;
+}
+
+.store-locator-link:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}

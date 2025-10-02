@@ -28,7 +28,7 @@
 
   .nav-links {
     list-style: none;
-    display: none;
+    display: flex;
     gap: 24px;
   }
 
@@ -69,7 +69,7 @@
     color: #444;
 }
 
-.app-container.light-mode .navv-link:hover {
+.app-container.light-mode .nav-link:hover {
     color: #4f9cff;
 }
 

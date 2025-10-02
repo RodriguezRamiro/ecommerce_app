@@ -5,7 +5,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import CartDrawer from "./components/CartDrawer";
+import StoreLocator from "./pages/StoreLocator";
 import ProductDetail from "./pages/ProductDetail";
+import Contact from "./pages/Contact";
+import Footer from "./components/Footer";
 
 
 // Pages
@@ -86,6 +89,7 @@ function App() {
   return (
     <Router>
       <div className={`app-container ${darkMode ? "dark-mode" : "light-mode"}`}>
+      <>
         {/* Pass cart count to Navbar */}
         <Navbar
           cartCount={cartItems.length}
@@ -93,6 +97,8 @@ function App() {
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />
+
+      </>
 
         {/* Main content area */}
         <main className="main-content">
@@ -102,10 +108,14 @@ function App() {
             <Route path="/product/:id" element={<ProductDetail onAddToCart={handleAddToCart} />} />
             <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateQuantity} onRemoveFromCart={handleRemoveFromCart} />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/store-locator" element={<StoreLocator />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
+
+        <Footer />
 
         {/* Cart Drawer (global) */}
         <CartDrawer
