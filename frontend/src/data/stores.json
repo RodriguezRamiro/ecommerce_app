@@ -1,0 +1,23 @@
+// frontend/src/data/stores.json
+
+
+[
+    {
+        "id": 1,
+        "name": "Downtown Store",
+        "adress": "123 Main St, Cityville",
+        "zip": "12345"
+    },
+    {
+        "id": 2,
+        "name": "Uptown Store",
+        "adress": "456 Elm St, Cityville",
+        "zip": "12346"
+    },
+    {
+        "id": 3,
+        "name": "Suburban Store",
+        "adress": "789 Oak St, Townsville",
+        "zip": "12347"
+    }
+]
