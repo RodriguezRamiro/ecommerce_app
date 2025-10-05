@@ -1,4 +1,4 @@
-// src/data/products.js
+//frontend/src/data/products.js
 
 const products = [
   {
@@ -24,7 +24,7 @@ const products = [
     name: "Sneakers",
     price: 90,
     image: "https://via.placeholder.com/300x200",
-    badge: "Featured",                     
+    badge: "Featured",
     category: "Footwear",
     description: "Lightweight everyday sneakers with breathable mesh uppers and cushioned midsoles for extra comfort."
   },

@@ -80,19 +80,24 @@ useEffect(() => {
           <motion.div
             className="cart-overlay"
             onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: 0.5, scale: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           />
 
           {/* Drawer */}
-          <motion.div
-            className="cart-drawer"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.3 }}
-          >
+            <motion.div
+              className="cart-drawer"
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ type: "spring",
+              stiffness: 260,
+              damping: 25,
+              duration: 0.4,
+              ease: "easeOut" }}
+            >
             {/* Header */}
             <div className="cart-header">
               <h2>Your Cart</h2>
