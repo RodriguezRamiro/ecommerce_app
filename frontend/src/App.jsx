@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import CartDrawer from "./components/CartDrawer";
 import StoreLocator from "./pages/StoreLocator";
+import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
@@ -105,6 +106,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
             <Route path="/shop" element={<Shop onAddToCart={handleAddToCart} />} />
+            <Route path="/shop" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail onAddToCart={handleAddToCart} />} />
             <Route path="/product/:id" element={<ProductDetail onAddToCart={handleAddToCart} />} />
             <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateQuantity} onRemoveFromCart={handleRemoveFromCart} />} />
             <Route path="/about" element={<About />} />

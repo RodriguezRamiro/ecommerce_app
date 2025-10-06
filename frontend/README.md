@@ -21,6 +21,23 @@ It started from a minimal Vite React template and has been **refactored to remov
 
 ## Project Structure
 
+backend/
+│
+├── app.py                # Main entry point
+├── routes/               # All route files
+│   ├── __init__.py
+│   ├── products.py
+│   ├── contact.py
+│   ├── orders.py
+│   └── health.py
+│
+├── data/                 # JSON mock data
+│   └── products.json
+│
+└── utils/                # Utility/helper functions
+    ├── __init__.py
+    └── validators.py     # For form validation
+
 frontend/
 ├── src/
 │ ├── components/ # Reusable components (Navbar, Button, ProductCard, CartDrawer, etc.)
@@ -69,4 +86,3 @@ Currently, two official plugins are available:
 @vitejs/plugin-react-swc
  uses SWC
  for Fast Refresh
-
