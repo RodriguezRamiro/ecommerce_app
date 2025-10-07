@@ -1,6 +1,6 @@
 // frontend/src/utils/api.js
 
-const API_BASE = process.env.REEACT_APP_API_URL || "http://127.0.0.1:5000/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 
 export async function fetchProducts() {
@@ -24,3 +24,6 @@ export async function checkHealth() {
   const res = await fetch(`${API_BASE}/health`);
   return res.json();
 }
+
+
+export default BASE_URL;

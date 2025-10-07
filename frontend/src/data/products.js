@@ -1,4 +1,3 @@
-//frontend/src/data/products.js
 
 const products = [
   {
