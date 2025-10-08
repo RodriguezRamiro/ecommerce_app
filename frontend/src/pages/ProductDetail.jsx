@@ -1,39 +1,51 @@
 // frontend/src/pages/ProductDetail.jsx
 
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import products from '../data/products';
-import './styles/ProductDetail.css';
+import React, { useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import products from "../data/products.js";
+import "./styles/ProductDetail.css";
 
 export default function ProductDetail({ onAddToCart}) {
     const { id } = useParams();                         // grab id;
-    const product = products.find(p => p.id === Number(id)); // find product by id
+    const product = products.find((p) => p.id === parseInt(id)); // find product by id
+    const [quantity, setQuantity] = useState(1);
 
-    if (!product) {
-        return (
-            <div className='product-detail-container'>
-            <h2> Product Not Found </h2>
-            <Link to='/shop' className='black-button'>Back to Shop</Link>
-            </div>
-        );
-    }
+    if (!product) return <p className="not-found">Product not found.</p>;
+
   return (
     <div className='product-detail-container'>
-        <img src={product.image} alt={product.name} className='product-detail-img' />
-        <div className='product-detail-info'>
-            <h1>{product.name}</h1>
-            <p className='product-detail-price'>${product.price}</p>
-            <p className='product-detail-desc'>
-                {product.description || 'This is a greate product!'}
-            </p>
+        <Link to="/shop" className="back-link">← Back to Shop</Link>
+
+        <div className='product-detail-card'>
+            {/* Image */}
+            <div className="product-image">
+                <img
+                src={product.img || "https://via.placeholder.com/400x400"}
+                alt={product.name}
+            />
+            </div>
+
+            {/* Details */}
+            <div className="product-info">
+                <h2 className="product-nmae">{product.name}</h2>
+                <p className="product-prce">${product.price.toFixed(2)}</p>
+                <p className="product-description">{product.description}</p>
+
+            {/* Quantity Selector */}
+            <div className="quantity-selector">
+                <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
+                <span>{quantity}</span>
+                <button onClick={() => setQuantity(q = q + 1)}>+</button>
+            </div>
+
+            {/* Add to Cart BUtton */}
             <button
-            className='add-to-cart-btn'
-            onClick={() => onAddToCart(product)}
+            className="add-to-cart-btn"
+            onClick={() => onAddToCart(product, quantity)}
             >
                 Add to Cart
             </button>
-            <Link to='/shop' className='black-button'>← Back to Shop</Link>
-
+            </div>
         </div>
     </div>
   )

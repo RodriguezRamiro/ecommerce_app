@@ -12,35 +12,53 @@ export default function Contact() {
   });
 
   const [status, setStatus] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...prev, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("");
-    setError("");
+    setErrors([]);
 
     try {
       const res = await submitContactForm(formData);
-      setStatus("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-      console.log("Server response:", res);
-    } catch (err) {
-      setError("Failed to send message. Please try again.");
-      console.error(err);
-    }
-  };
+
+      if (!res.success) {
+        // display validation errors from backend
+        setErrors(res.errors || ['Failed to submit the form.']);
+        return;
+      }
+
+       // If successful
+       setStatus('Message sent successfully!');
+       setFormData({ name: '', email: '', message: '' });
+     } catch (err) {
+       console.error(err);
+       setErrors(['An unexpected error occurred. Please try again later.']);
+     }
+   };
 
   return (
     <div className="contact-page">
       <h1>Contact Us</h1>
+
       {status && <p className="success">{status}</p>}
-      {error && <p className="error">{error}</p>}
-      <p>We’d love to hear from you! Fill out the form below to reach us.</p>
+
+      {/* show multiple error messages */}
+      {errors.length > 0 && (
+        <ul className="error-list">
+          {errors.map((err, i) => (
+            <li key={i} className="error">{err}</li>
+          ))}
+        </ul>
+      )}
+
+    <p>We’d love to hear from you! Fill out the form below to reach us.</p>
+
 
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-group">

@@ -91,11 +91,10 @@
   }
 
   .view-all-link {
-    color: #3b82f6;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
-    color: #a78bfa;
+    color: #fff;
     text-decoration: underline;
   }
 

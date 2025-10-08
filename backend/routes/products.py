@@ -4,18 +4,23 @@ from flask import Blueprint, jsonify
 from pathlib import Path
 import json
 
+# Blueprint
 products_bp = Blueprint("products", __name__)
+
+#Path to products.json
+PRODUCTS_FILE = Path(__file__).resolve().parent.parent / "data" / "products.json"
 
 
 @products_bp.route("/", methods=["GET"])
 def get_products():
-    """Serve mock products from local JSON file"""
-    products_path = Path(__file__).resolve().parent.parent / "data" / "products.json"
+    """Serve mock products from local JSON file."""
+    if not PRODUCTS_FILE.exists():
+        return jsonify({"error": "Products data not found"}), 404
 
-    if not products_path.exists():
-        return jsonify({"error": "Products data not found"}), 400
+    try:
+        with PRODUCTS_FILE.open() as f:
+            products = json.load(f)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Products file is corrupted"}), 500
 
-    with products_path.open() as f:
-        products = json.load(f)
-
-        return jsonify(products)
+    return jsonify(products)

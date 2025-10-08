@@ -7,6 +7,9 @@ import json
 
 contact_bp = Blueprint("contact", __name__)
 
+# Path to messages.json
+MESSAGES_FILE = Path(__file__).resolve().parent.parent / "data" / "messages.json"
+
 @contact_bp.route("/", methods=["POST"])
 def handle_contact():
     """Handle contact form submission."""
@@ -17,18 +20,21 @@ def handle_contact():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 400
 
-    # Save messages locally
-    messages_path = Path(__file__).resolve().parent.parent / "data" / "messages.json"
-
     # Load existing messages
     messages = []
-    if messages_path.exists():
-        with messages_path.open() as f:
-            messages = json.load(f)
+    if MESSAGES_FILE.exists():
+        try:
+            with MESSAGES_FILE.open() as f:
+                messages = json.load(f)
+        except json.JSONDecodeError:
+            # If file is corrupted, start fresh
+            messages = []
 
+    # Append new message
     messages.append(data)
 
-    with messages_path.open("w") as f:
+    # Save updated messages
+    with MESSAGES_FILE.open("w") as f:
         json.dump(messages, f, indent=2)
 
     return jsonify({"status": "success", "message": "Contact form saved"}), 201

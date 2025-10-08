@@ -1,6 +1,6 @@
 // frontend/src/utils/api.js
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
 
 
 export async function fetchProducts() {
@@ -16,14 +16,18 @@ export async function submitContactForm(data) {
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) throw new Error("Failed to submit contact form");
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData?.errors?.join(", ") || "Failed to submit contact form");
+  }
+
   return res.json();
 }
 
 export async function checkHealth() {
-  const res = await fetch(`${API_BASE}/health`);
-  return res.json();
-}
+    const res = await fetch(`${BASE_URL}/health`);
+    if (!res.ok) throw new Error("Health check failed");
+    return res.json();
+  }
 
-
-export default BASE_URL;
+  export default BASE_URL;
