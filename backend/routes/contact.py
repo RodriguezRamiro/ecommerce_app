@@ -1,40 +1,29 @@
-# //backend/routes/contact.py
+# backend/routes/contact.py
 
 from flask import Blueprint, jsonify, request
-from utils.validators import validate_contact_form
-from pathlib import Path
-import json
+from data.utils.file_manager import load_json, save_json
+from data.utils.validators import validate_contact_form
 
 contact_bp = Blueprint("contact", __name__)
-
-# Path to messages.json
-MESSAGES_FILE = Path(__file__).resolve().parent.parent / "data" / "messages.json"
 
 @contact_bp.route("/", methods=["POST"])
 def handle_contact():
     """Handle contact form submission."""
     data = request.get_json() or {}
 
-    # Validate input
+    #  Validate input
     errors = validate_contact_form(data)
     if errors:
         return jsonify({"status": "error", "errors": errors}), 400
 
-    # Load existing messages
-    messages = []
-    if MESSAGES_FILE.exists():
-        try:
-            with MESSAGES_FILE.open() as f:
-                messages = json.load(f)
-        except json.JSONDecodeError:
-            # If file is corrupted, start fresh
-            messages = []
+    #  Load existing messages (or empty list if none)
+    messages = load_json("messages.json")
 
-    # Append new message
+    #  Add the new message
     messages.append(data)
 
-    # Save updated messages
-    with MESSAGES_FILE.open("w") as f:
-        json.dump(messages, f, indent=2)
+    #  Save it back
+    save_json("messages.json", messages)
 
+    #  Respond
     return jsonify({"status": "success", "message": "Contact form saved"}), 201

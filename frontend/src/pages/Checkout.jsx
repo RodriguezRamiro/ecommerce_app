@@ -1,6 +1,7 @@
 //src/pages/Checkout.jsx
 
 import React from "react";
+import { createOrder } from "../utils/api";
 import "./styles/Checkout.css";
 
 export default function Checkout() {
