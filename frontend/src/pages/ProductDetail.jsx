@@ -5,24 +5,28 @@ import { useParams, Link } from "react-router-dom";
 import products from "../data/products.js";
 import "./styles/ProductDetail.css";
 
-export default function ProductDetail({ onAddToCart}) {
-    const { id } = useParams();                         // grab id;
-    const product = products.find((p) => p.id === parseInt(id)); // find product by id
+export default function ProductDetail({ onAddToCart }) {
+    const { id } = useParams();
+    const product = products.find((p) => p.id === parseInt(id));
     const [quantity, setQuantity] = useState(1);
 
-    if (!product) return <p className="not-found">Product not found.</p>;
+    if (!product) {
+        return <p className="not-found">Product not found.</p>;
+      }
 
-  return (
-    <div className='product-detail-container'>
-        <Link to="/shop" className="back-link">← Back to Shop</Link>
+      return (
+        <div className="product-detail-container">
+          <Link to="/shop" className="back-link">
+            ← Back to Shop
+          </Link>
 
-        <div className='product-detail-card'>
+          <div className="product-detail-card">
             {/* Image */}
             <div className="product-image">
-                <img
+              <img
                 src={product.img || "https://via.placeholder.com/400x400"}
                 alt={product.name}
-            />
+              />
             </div>
 
             {/* Details */}
@@ -48,5 +52,5 @@ export default function ProductDetail({ onAddToCart}) {
             </div>
         </div>
     </div>
-  )
+  );
 }

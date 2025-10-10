@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import "./styles/Products.css";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const {addToCart } = useCart();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -44,6 +47,14 @@ export default function Products() {
               <h2>{product.name}</h2>
               <p>${product.price}</p>
             </Link>
+            <button
+            className="add-to-cart-btn"
+            onClick={() => {addToCart(product);
+            alert(`${product.name} added to cart 🛒`)
+            }}
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>

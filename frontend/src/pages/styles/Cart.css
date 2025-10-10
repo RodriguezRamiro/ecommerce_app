@@ -55,6 +55,37 @@
     color: #374151;
   }
 
+  .item-qty {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .item-qty button {
+    background: #eee;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+
+  .remove-btn {
+    background: none;
+    color: crimson;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .clear-cart-btn {
+    margin-top: 10px;
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
   .cart-total {
     display: flex;
     justify-content: space-between;

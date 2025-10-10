@@ -68,7 +68,7 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode, cartCount 
 
           {/* Cart */}
           <button className="cart-btn" onClick={onToggleCart}>
-            Cart
+          🛒
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
 

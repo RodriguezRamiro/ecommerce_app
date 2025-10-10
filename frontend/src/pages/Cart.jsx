@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import "./styles/Cart.css";
 
-export default function Cart({ cartItems }) {
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * (item.quantity || 1),
-    0
-  );
+export default function Cart() {
+  const { cart, removeFromCart, updateQty, clearCart } = useCart();
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
 
   // Store search state
   const [query, setQuery] = useState("");
@@ -47,9 +47,20 @@ export default function Cart({ cartItems }) {
           {/* Cart Items */}
           <ul className="cart-items">
             {cartItems.map((item, idx) => (
-              <li key={idx} className="cart-item">
+              <li key={item.id} className="cart-item">
                 <span className="item-name">{item.name}</span>
                 <span className="item-price">${item.price.toFixed(2)}</span>
+                <div className="item-qty">
+                  <button onClick={() => updateQty(item.id, item.qty - 1)}>-</button>
+                  <span>{item.qty}</span>
+                  <button onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
+                </div>
+                <button
+                className="remove-btn"
+                onClick={() => removeFromCart(item.id)}
+                >
+                  x
+                </button>
               </li>
             ))}
           </ul>
@@ -59,6 +70,11 @@ export default function Cart({ cartItems }) {
             <span>Total:</span>
             <span>${total.toFixed(2)}</span>
           </div>
+
+          {/* Clear Cart */}
+          <button className="clear-cart-btn" onClick={clearCart}>
+            Clear Cart
+          </button>
 
           {/* Checkout button */}
           <div className="checkout-container">

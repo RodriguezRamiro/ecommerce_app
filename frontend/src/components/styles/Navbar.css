@@ -102,8 +102,11 @@
     background: #4f9cff;
     border: none;
     border-radius: 6px;
+    margin-left: 1rem;
     color: white;
     font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
     cursor: pointer;
   }
 
@@ -114,8 +117,8 @@
   .cart-count {
     position: absolute;
     top: -6px;
-    right: -6px;
-    background: red;
+    right: -10px;
+    background: crimson;
     color: white;
     font-size: 0.75rem;
     font-weight: bold;

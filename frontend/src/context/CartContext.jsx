@@ -47,11 +47,22 @@ export function CartProvider({ children }) {
   // Total items in cart
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
 
-  return (
-    <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateQty, clearCart, cartCount }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
+// Total price of all items in the cart
+const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+return (
+  <CartContext.Provider
+    value={{
+      cart,
+      addToCart,
+      removeFromCart,
+      updateQty,
+      clearCart,
+      cartCount,
+      total,
+    }}
+  >
+    {children}
+  </CartContext.Provider>
+);
 }
