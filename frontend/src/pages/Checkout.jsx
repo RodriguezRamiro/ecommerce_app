@@ -6,13 +6,20 @@ import { createOrder } from "../utils/api";
 import "./styles/Checkout.css";
 
 export default function Checkout() {
-  const { cart, total, clearCart } = useCart();
+  const { cart, clearCart } = useCart();
+
+  // Calculate total from cart
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  // Form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     address: "",
     payment: "",
   });
+
+  // Message state
   const [message, setMessage] = useState("");
 
    // Update form fields
@@ -70,7 +77,8 @@ export default function Checkout() {
                <ul className="cart-summary-list">
                  {cart.map((item) => (
                    <li key={item.id}>
-                     {item.name} × {item.qty} — ${(item.price * item.qty).toFixed(2)}
+                     {item.name} × {item.qty} — $
+                     {(item.price * item.qty).toFixed(2)}
                    </li>
                  ))}
                </ul>
@@ -83,6 +91,8 @@ export default function Checkout() {
 
         {/* 📝 Checkout Form */}
         <form className="checkout-form" onSubmit={handleSubmit}>
+          
+          {/* Name */}
         <div className="form-group">
           <label>Full Name</label>
           <input
@@ -135,7 +145,10 @@ export default function Checkout() {
         </div>
 
           {/* Submit */}
-          <button type="submit" className="submit-btn">
+          <button type="submit"
+          className="submit-btn"
+          disabled={cart.length === 0}
+          >
           Place Order
         </button>
       </form>

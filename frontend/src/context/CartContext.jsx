@@ -33,10 +33,10 @@ export function CartProvider({ children }) {
   };
 
   // Update quantity
-  const updateQty = (id, qty) => {
+  const updateQty = (id, newQty) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(1, qty) } : item
+        item.id === id ? { ...item, qty: Math.max(1, newQty) } : item
       )
     );
   };

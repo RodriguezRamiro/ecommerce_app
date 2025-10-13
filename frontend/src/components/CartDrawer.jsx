@@ -9,7 +9,7 @@ import "./styles/CartDrawer.css";
 export default function CartDrawer({
   isOpen,
   onClose,
-  cartItems,
+  cart = [],
   onRemoveFromCart,
   onUpdateQuantity,
 }) {
@@ -40,7 +40,7 @@ useEffect(() => {
       return res.json();
     })
     .then((data) => {
-      setStoresData(data);
+      setStoresData(Array.isArray(data) ? data: []);
       setError(null);
     })
     .catch((err) => {
@@ -55,6 +55,10 @@ useEffect(() => {
   //Check if input is numeric zip code or text city
   const handleSearch = (e) => {
     e.preventDefault();
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
 
     const isZip = /^\d{5}$/.test(query.trim());
     const filtered = storesData.filter((store) =>
@@ -66,10 +70,12 @@ useEffect(() => {
     setResults(filtered);
   };
 
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * (item.quantity || 1),
-    0
-  );
+  const totalPrice = Array.isArray(cart)
+    ? cart.reduce(
+        (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+        0
+      )
+    : 0;
 
 
   return (
@@ -146,19 +152,19 @@ useEffect(() => {
 
             {/* Cart Items */}
             <div className="cart-items">
-              {cartItems.length === 0 ? (
+              {Array.isArray(cart) && cart.length === 0 ? (
                 <p className="empty-cart">Your cart is empty</p>
               ) : (
-                cartItems.map((item) => (
+                cart.map((item) => (
                   <div key={item.id} className="cart-item">
                     <img
-                      src={item.img}
+                      src={item.img || "https://via.placeholder.com/80"}
                       alt={item.name}
                       className="cart-item-img"
                     />
                     <div className="cart-item-details">
                       <h3>{item.name}</h3>
-                      <p>${item.price.toFixed(2)}</p>
+                      <p>${item.price?.toFixed(2)}</p>
                       <div className="cart-qty-controls">
                         <button
                           onClick={() =>
@@ -171,7 +177,7 @@ useEffect(() => {
                         <span>{item.quantity || 1}</span>
                         <button
                           onClick={() =>
-                            onUpdateQuantity(item.id, (item.quantity || 1) + 1)
+                            onUpdateQuantity(item.id, (item.quantity || 1) + 1, 10)
                           }
                         >
                           +
@@ -195,6 +201,9 @@ useEffect(() => {
                 <span>Total:</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
+              <Link to="/cart" onClick={onClose} className="view-cart-btn">
+                View Cart
+                </Link>
               <Link to="/checkout" onClick={onClose} className="checkout-btn">
                 Checkout
               </Link>

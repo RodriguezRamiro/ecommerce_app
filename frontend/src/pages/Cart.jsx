@@ -35,7 +35,8 @@ export default function Cart() {
     <div className="cart-page">
       <h2>Your Cart</h2>
 
-      {cartItems.length === 0 ? (
+      {/* Empty cart message */}
+      {cart.length === 0 ? (
         <p className="empty-cart">
           Your cart is empty.{" "}
           <Link to="/shop" className="shop-link">
@@ -46,15 +47,42 @@ export default function Cart() {
         <div className="cart-container">
           {/* Cart Items */}
           <ul className="cart-items">
-            {cartItems.map((item, idx) => (
+            {cart.map((item) => (
               <li key={item.id} className="cart-item">
+
+                {/* Product Thumbnail */}
+                <Link to={`/product/${item.id}`}>
+                  <img
+                  src={item.img || "https://via.placeholder.com/60"}
+                  alt={item.name}
+                  className="item-thumbnail"
+                  />
+                </Link>
+
+                {/* Name and Price */}
+                <div className="item-details">
                 <span className="item-name">{item.name}</span>
                 <span className="item-price">${item.price.toFixed(2)}</span>
+
+                {/* Quantity Controls */}
                 <div className="item-qty">
-                  <button onClick={() => updateQty(item.id, item.qty - 1)}>-</button>
+                  <button
+                  onClick={() => updateQty(item.id, item.qty - 1)}
+                  disabled={item.qty <= 1}
+                  >
+                  -
+                  </button>
                   <span>{item.qty}</span>
                   <button onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
                 </div>
+                </div>
+
+                {/* Subtotal */}
+                <span className="items-subtotal">
+                  ${(item.price * item.qty).toFixed(2)}
+                </span>
+
+                {/* Remove Item */}
                 <button
                 className="remove-btn"
                 onClick={() => removeFromCart(item.id)}

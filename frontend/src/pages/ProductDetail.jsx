@@ -2,17 +2,24 @@
 
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import products from "../data/products.js";
 import "./styles/ProductDetail.css";
 
-export default function ProductDetail({ onAddToCart }) {
+export default function ProductDetail() {
     const { id } = useParams();
+    const { addToCart } = useCart(); // get addToCArt
     const product = products.find((p) => p.id === parseInt(id));
     const [quantity, setQuantity] = useState(1);
 
     if (!product) {
         return <p className="not-found">Product not found.</p>;
       }
+
+      const handleAddToCart = () => {
+        addToCart(product, quantity);
+      };
+
 
       return (
         <div className="product-detail-container">
@@ -21,6 +28,7 @@ export default function ProductDetail({ onAddToCart }) {
           </Link>
 
           <div className="product-detail-card">
+            
             {/* Image */}
             <div className="product-image">
               <img
@@ -45,7 +53,7 @@ export default function ProductDetail({ onAddToCart }) {
             {/* Add to Cart BUtton */}
             <button
             className="add-to-cart-btn"
-            onClick={() => onAddToCart(product, quantity)}
+            onClick={handleAddToCart}
             >
                 Add to Cart
             </button>

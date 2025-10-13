@@ -24,3 +24,20 @@ def get_products():
         return jsonify({"error": "Products file is corrupted"}), 500
 
     return jsonify(products)
+
+@products_bp.route("/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    """FEtch a single product by its ID."""
+    if not PRODUCTS_FILE.exists():
+        return jsonify({"error": "Products data not found"}), 404
+    try:
+        with PRODUCTS_FILE.open() as f:
+            products = json.load(f)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Products file is corrupted"}), 500
+
+    # Find product by ID
+    product = next((p for product in producs if p.get("id") === product_id), None)
+    if not product:
+        return jsonify({"error": f"Product with ID {product_id} not found"}), 404
+    return jsonify(product)

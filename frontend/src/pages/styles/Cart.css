@@ -42,13 +42,24 @@
 
   .cart-item {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
-    font-weight: 500;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #ddd;
   }
 
   .cart-item:hover {
     background: #f9fafb;
+  }
+
+  .item-name {
+    font-weight: 600;
+  }
+
+  .item-price {
+    color: #777;
+    font-size: 0.9rem;
   }
 
   .item-price {
@@ -58,22 +69,57 @@
   .item-qty {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.4px;
+  }
+
+  .item-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
   }
 
   .item-qty button {
-    background: #eee;
+    padding: 0.2rem 0.6rem;
+    background-color: #f0f0f0;
     border: none;
+    border-radius: 4px;
     padding: 4px 8px;
     cursor: pointer;
   }
 
+  .item-qty button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .item-subtotal {
+    font-weight: 600;
+    margin-left: 1rem;
+    color: #00c853;
+    min-width: 70px;
+    text-align: right;
+  }
+
   .remove-btn {
-    background: none;
+    background: transparent;
     color: crimson;
     border: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  .remove-btn:hover {
+    color: #b71c1c;
   }
 
   .clear-cart-btn {
