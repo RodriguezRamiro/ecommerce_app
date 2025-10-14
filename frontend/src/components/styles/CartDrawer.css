@@ -125,16 +125,29 @@
     display: block;
     width: 100%;
     text-align: center;
+    background: linear-gradient(90deg, #3b82f6, #a78bfa);
     padding: 12px;
-    background: #3b82f6;
     color: white;
     border-radius: 8px;
     text-decoration: none;
     transition: background 0.2s ease;
   }
 
+  .view-cart-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    background: #10b981;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    margin-bottom: 8px;
+  }
+
   .checkout-btn:hover {
-    background: #2563eb;
+    background: linear-gradient(90deg, #a78bfa, #3b82f6);
   }
 
   .empty-cart {
