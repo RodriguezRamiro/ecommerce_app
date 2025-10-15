@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
+import { useCart } from "../context/CartContext";
 import "./styles/ProductCard.css";
 
 // Inline SVG fallback
@@ -15,8 +16,10 @@ const fallbackSvg = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
-export default function ProductCard({ product, onAddToCart }) {
+export default function ProductCard({ product }) {
   const [src, setSrc] = useState(product.image || fallbackSvg);
+  const { addToCart } = useCart();
+
 
   const formattedPrice =
     product.price != null ? `$${product.price.toFixed(2)}` : "N/A";
@@ -58,7 +61,7 @@ export default function ProductCard({ product, onAddToCart }) {
         <button
           type="button"
           aria-label={`Add ${product.name || "product"} to cart`}
-          onClick={() => onAddToCart(product)}
+          onClick={() => addToCart(product)}
           className="add-btn"
         >
           Add to Cart

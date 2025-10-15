@@ -5,9 +5,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./styles/Navbar.css";
 
-export default function Navbar({ onToggleCart, darkMode, setDarkMode, cartCount }) {
+export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
     const location = useLocation();
+    const { cartCount } = useCart();
+
 
 
   // Apply dark mode on mount and on toggle

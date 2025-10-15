@@ -49,7 +49,7 @@ export default function ProductList({
           {/* Render Products */}
           {productsToShow.map((product) => (
             <motion.div key={product.id} variants={itemVariants}>
-              <ProductCard product={product} onAddToCart={onAddToCart} />
+              <ProductCard product={product} onAddToCart={onAddToCart ?? (() => {})} />
             </motion.div>
           ))}
         </motion.div>

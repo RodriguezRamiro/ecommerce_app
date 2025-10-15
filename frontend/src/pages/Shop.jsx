@@ -3,11 +3,14 @@
 import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import products from "../data/products";
 import ProductList from "../components/ProductList";
 import "./styles/Shop.css";
 
-export default function Shop({ onAddToCart }) {
+export default function Shop() {
+
+    const { addToCart } = useCart();
 
     // State for filters and sorting
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -77,7 +80,7 @@ export default function Shop({ onAddToCart }) {
 
         {/* Product Grid */}
         <ProductList
-        products={displayProducts} onAddToCart={onAddToCart} title={null} />
+        products={displayProducts} onAddToCart={addToCart} title={null} />
 
         {/* CTA */}
         <div className="shop-cta">

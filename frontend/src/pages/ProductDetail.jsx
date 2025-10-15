@@ -18,6 +18,7 @@ export default function ProductDetail() {
 
       const handleAddToCart = () => {
         addToCart(product, quantity);
+        console.log(`✅ Added ${quantity} × ${product.name} to cart`);
       };
 
 
@@ -28,7 +29,7 @@ export default function ProductDetail() {
           </Link>
 
           <div className="product-detail-card">
-            
+
             {/* Image */}
             <div className="product-image">
               <img
@@ -39,15 +40,15 @@ export default function ProductDetail() {
 
             {/* Details */}
             <div className="product-info">
-                <h2 className="product-nmae">{product.name}</h2>
-                <p className="product-prce">${product.price.toFixed(2)}</p>
+                <h2 className="product-name">{product.name}</h2>
+                <p className="product-price">${product.price.toFixed(2)}</p>
                 <p className="product-description">{product.description}</p>
 
             {/* Quantity Selector */}
             <div className="quantity-selector">
-                <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
+                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity(q = q + 1)}>+</button>
+                <button onClick={() => setQuantity((q) => q + 1)}>+</button>
             </div>
 
             {/* Add to Cart BUtton */}

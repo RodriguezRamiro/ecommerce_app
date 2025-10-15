@@ -22,15 +22,16 @@ export function CartProvider({ children }) {
   }, [cart]);
 
   // Add product
-  const addToCart = (product) => {
+  const addToCart = (product, qty = 1) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
       if (existing) {
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          item.id === product.id
+          ? { ...item, qty: item.qty + qty } : item
         );
       }
-      return [...prevCart, { ...product, qty: 1 }];
+      return [...prevCart, { ...product, qty }];
     });
   };
 
@@ -52,7 +53,8 @@ export function CartProvider({ children }) {
   const clearCart = () => setCart([]);
 
   // Total items in cart
-  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+  const cartCount = cart.reduce((total, item) => total + item.qty, 0);
+
 
 // Total price of all items in the cart
 const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
