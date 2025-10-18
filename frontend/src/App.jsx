@@ -7,6 +7,7 @@ import CartDrawer from "./components/CartDrawer";
 import StoreLocator from "./pages/StoreLocator";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+import Confirmation from "./pages/Confirmation";
 import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
 
@@ -25,7 +26,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  
+
   return (
     <CartProvider>
       <Router>
@@ -47,6 +48,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/store-locator" element={<StoreLocator />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/confirmation" element={<Confirmation /> } />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

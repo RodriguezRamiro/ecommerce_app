@@ -17,6 +17,8 @@ export function CartProvider({ children }) {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [lastOrder, setLastOrder] = useState(null);
+
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -54,10 +56,31 @@ export function CartProvider({ children }) {
 
   // Total items in cart
   const cartCount = cart.reduce((total, item) => total + item.qty, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const taxRate = 0.07; //7%
+  const tax = subtotal * taxRate;
+  const total = subtotal + tax;
 
+  // Generate & store order details when user check out
+  const placeOrder = () => {
+    if(cart.length === 0 ) return null;
 
-// Total price of all items in the cart
-const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const orderNumber = Math.floor(100000 + Math.random() * 900000); //6-digit random number
+
+  const orderData = {
+    orderNumber,
+    item: cart,
+    subtotal,
+    tax,
+    total,
+    date: new Date().toISOString(),
+  };
+
+  setLastOrder(orderData);
+  clearCart();   // reset cart after placing order
+
+  return orderData;
+};
 
 return (
   <CartContext.Provider
@@ -68,7 +91,12 @@ return (
       updateQty,
       clearCart,
       cartCount,
+      subtotal,
+      tax,
       total,
+      lastOrder,
+      setLastOrder,
+      placeOrder,
     }}
   >
     {children}

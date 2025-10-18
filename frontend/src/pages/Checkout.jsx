@@ -1,15 +1,25 @@
 //src/pages/Checkout.jsx
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../utils/api";
 import "./styles/Checkout.css";
 
 export default function Checkout() {
-  const { cart, clearCart } = useCart();
+  const { cart, clearCart, setLastOrder } = useCart();
+  const navigate = useNavigate();
 
-  // Calculate total from cart
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // Subtotal (derived)
+  const subtotal = useMemo(
+    () => cart.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0),
+    [cart]
+  );
+
+  // Tax calculations
+  const taxRate = 0.07; // 7% tax
+  const tax = useMemo(() => subtotal * taxRate, [subtotal]);
+  const grandTotal = useMemo(() => subtotal + tax, [subtotal, tax]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -21,12 +31,27 @@ export default function Checkout() {
 
   // Message state
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
    // Update form fields
    const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  // Local validation helper (can expand later)
+  const formIsValid = () =>
+  formData.name.trim() &&
+  formData.email.trim() &&
+  formData.address.trim() &&
+  formData.payment.trim();
+
+  // Generate unique order number
+  const generateOrderNumber = () => {
+    const datePart = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const randomPart = Math.floor(10000 + Math.random() * 90000); // 5 digit random number
+    return `ORD-${datePart}-${randomPart}`
+  }
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -37,27 +62,50 @@ export default function Checkout() {
       return;
     }
 
+    setLoading(true);
+    setMessage("");
+
+    // Order payload. Use Grand total as total, back end sees final amount.
+
     const orderData = {
-      ...formData,
+      customer_name: formData.name,
+      email: formData.email,
+      adress: formData.address,
+      payment: formData.payment,
       items: cart,
-      total,
+      subtotal: Number(subtotal.toFixed(2)),
+      tax: Number(tax.toFixed(2)),
+      total: Number(grandTotal.toFixed(2)),
+      created_at: new Date().toISOString(),
+      orderNumber: generateOrderNumber()
     };
 
     try {
-      const response = await createOrder(orderData);
 
-      if (response.success) {
-        setMessage("✅ Order placed successfully!");
-        clearCart();
-        setFormData({ name: "", email: "", address: "", payment: "" });
-      } else {
-        setMessage("❌ Failed to place order. Please try again.");
-      }
+      // adapt depending on API: createOrder, helpers return create order or an object { success: true }
+      const response = await createOrder(orderData);
+      const ok =
+      response &&
+      (response.success);
+
+    if (ok) {
+          setMessage("✅ Order placed successfully!");
+          setLastOrder(orderData); // Save last order for confirmation page
+          clearCart();
+          setFormData({ name: "", email:"", address: "", payment: "" });
+          navigate("/confirmation");
+        } else {
+          // Show debug info if available
+          setMessage("❌ Failed to place order. Please try again.");
+          console.warn("createOrder response:", response);
+        }
     } catch (err) {
-      console.error(err);
+      console.error("Order error:", err);
       setMessage("⚠️ Error placing order.");
+    } finally {
+      setLoading(false);
     }
-  };
+    };
 
 
   return (
@@ -82,16 +130,35 @@ export default function Checkout() {
                    </li>
                  ))}
                </ul>
-               <p className="cart-summary-total">
-                 <strong>Total:</strong> ${total.toFixed(2)}
+
+               <div className="cart-summary-breakdown">
+                <div className="cart-summary-row">
+                 <span>Subtotal:</span>
+                 <span>${subtotal.toFixed(2)}</span>
+                </div>
+
+                <div className="cart-summary-row">
+               <p className="cart-summary-tax">
+               <span>Tax ({(taxRate * 100).toFixed(0)}%)</span>
+                <span>${tax.toFixed(2)}</span>
                </p>
+               </div>
+
+               <div className="cart-summary-row total">
+               <p className="cart-summary-total">
+               <strong>Total</strong>
+                <strong>${grandTotal.toFixed(2)}</strong>
+               </p>
+                </div>
+                </div>
              </>
            )}
          </div>
 
+
         {/* 📝 Checkout Form */}
         <form className="checkout-form" onSubmit={handleSubmit}>
-          
+
           {/* Name */}
         <div className="form-group">
           <label>Full Name</label>
@@ -139,7 +206,7 @@ export default function Checkout() {
             name="payment"
             value={formData.payment}
             onChange={handleChange}
-            placeholder="Card Number"
+            placeholder="Card Number (mock)"
             required
           />
         </div>
@@ -147,11 +214,11 @@ export default function Checkout() {
           {/* Submit */}
           <button type="submit"
           className="submit-btn"
-          disabled={cart.length === 0}
+          disabled={cart.length === 0 || loading || !formIsValid()}
           >
-          Place Order
-        </button>
-      </form>
+            {loading ? "placing order..." : "Place Order"}
+            </button>
+          </form>
 
       {message && <p className="checkout-message">{message}</p>}
     </div>

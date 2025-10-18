@@ -1,12 +1,14 @@
 // frontend/src/components/CartDrawer.jsx
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import "./styles/CartDrawer.css";
 
 export default function CartDrawer({ isOpen, onClose }) {
-  const { cart, removeFromCart, updateQty, total } = useCart();
+  const { cart, removeFromCart, updateQty, total, placeOrder } = useCart();
+  const navigate = useNavigate();
+
 
   // Store search state
   const [storesData, setStoresData] = useState([]);
@@ -14,6 +16,15 @@ export default function CartDrawer({ isOpen, onClose }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+
+  const handleCheckout = () => {
+    const order = placeOrder();
+    if (order) {
+      onClose();
+      navigate("/confirmation");
+    }
+  };
 
   // Load stores JSON on mount
   useEffect(() => {
@@ -171,9 +182,11 @@ export default function CartDrawer({ isOpen, onClose }) {
               <Link to="/cart" onClick={onClose} className="view-cart-btn">
                 View Cart
               </Link>
-              <Link to="/checkout" onClick={onClose} className="checkout-btn">
+              
+              {/* Check out order */}
+              <button onClick={handleCheckout} className="checkout-btn">
                 Checkout
-              </Link>
+              </button>
             </div>
           </motion.div>
         </>

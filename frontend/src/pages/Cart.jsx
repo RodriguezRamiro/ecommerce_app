@@ -2,12 +2,19 @@
 
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./styles/Cart.css";
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQty, clearCart, total } = useCart();
+  const { cart, removeFromCart, updateQty, clearCart, total, placeOrder } = useCart();
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    const order = placeOrder();
+    if (order) navigate("/confirmation");
+  };
+
 
   // Store search state
   const [query, setQuery] = useState("");
@@ -113,9 +120,10 @@ export default function Cart() {
               <span>${(total * 1.07).toFixed(2)}</span>
             </div>
 
-            <Link to="/checkout" className="checkout-btn full-width">
+            {/* Checkout button */}
+            <button onClick={handleCheckout} className="checkout-btn full-width">
               Proceed to Checkout
-            </Link>
+            </button>
             <Link to="/shop" className="continue-shopping-btn">
               ← Continue Shopping
             </Link>
