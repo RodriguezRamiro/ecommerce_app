@@ -1,0 +1,137 @@
+/* frontend/src/pages/styles/admin.css */
+
+/* Global Admin Styles */
+.admin-login,
+.admin-dashboard {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, #333);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.admin-login h2,
+.admin-dashboard h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.admin-login form,
+.add-product {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin-login input,
+.add-product input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.admin-login input:focus,
+.add-product input:focus {
+  border-color: #007bff;
+}
+
+.admin-login button,
+.add-product button,
+.admin-dashboard button {
+  background: #007bff;
+  color: white;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-login button:hover,
+.add-product button:hover,
+.admin-dashboard button:hover {
+  background: #0056b3;
+}
+
+.error-msg {
+    color: #ff4444;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .admin-dashboard ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+  }
+
+  .admin-dashboard li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9f9f9;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: background 0.2s ease;
+  }
+
+  .admin-dashboard li:hover {
+    background: #f0f0f0;
+  }
+
+
+  .admin-dashboard img {
+    border-radius: 4px;
+    margin-right: 0.5rem;
+  }
+
+  .admin-dashboard span {
+    flex-grow: 1;
+    margin-left: 0.5rem;
+  }
+
+  .admin-dashboard .logout-btn {
+    background: #ff4444;
+    margin-top: 1rem;
+  }
+
+  .admin-dashboard .logout-btn:hover {
+    background: #cc0000;
+  }
+
+  /* 🌗 Optional Dark Mode Support */
+  .dark .admin-login,
+  .dark .admin-dashboard {
+    background: #222;
+    color: #eee;
+  }
+
+  .dark .admin-dashboard li {
+    background: #2f2f2f;
+  }
+
+  .dark .admin-dashboard li:hover {
+    background: #3a3a3a;
+  }
+
+  .dark input {
+    background: #333;
+    color: #eee;
+    border-color: #555;
+  }
+
+  .dark input:focus {
+    border-color: #66aaff;
+  }

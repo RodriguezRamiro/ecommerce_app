@@ -18,6 +18,8 @@ import Cart from "./pages/Cart";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // Cart Context
 import { CartProvider } from "./context/CartContext";
@@ -35,6 +37,7 @@ function App() {
             onToggleCart={() => setIsCartOpen(true)}
             darkMode={darkMode}
             setDarkMode={setDarkMode}
+            adminLink={true}            // add persistance in backend then remove
           />
 
           <main className="main-content">
@@ -42,13 +45,14 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/store-locator" element={<StoreLocator />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/confirmation" element={<Confirmation /> } />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
@@ -56,7 +60,9 @@ function App() {
           <Footer />
 
           {/* Cart Drawer */}
-          <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+          <CartDrawer
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)} />
         </div>
       </Router>
     </CartProvider>

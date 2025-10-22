@@ -1,6 +1,7 @@
 # //backend/app.py
 
 from flask import Flask, jsonify, request
+from routes.admin_routes import admin_bp
 from flasgger import Swagger
 from flask_cors import CORS
 from pathlib import Path
@@ -8,6 +9,8 @@ import json
 
 # Create app
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'super-secret-key'
+
 CORS(app)
 swagger = Swagger(app)
 
@@ -22,6 +25,7 @@ app.register_blueprint(products_bp, url_prefix="/api/products")
 app.register_blueprint(contact_bp, url_prefix="/api/contact")
 app.register_blueprint(orders_bp, url_prefix="/api/orders")
 app.register_blueprint(health_bp, url_prefix="/api/health")
+app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
 # Base Route
 @app.route("/")

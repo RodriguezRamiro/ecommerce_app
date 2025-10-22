@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+
 import "./styles/Navbar.css";
 
-export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
+export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink }) {
   const [mobileOpen, setMobileOpen] = useState(false);
     const location = useLocation();
     const { cartCount } = useCart();
@@ -73,6 +74,11 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
           🛒
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
+
+          {/* admin link to be removed after backend integration */}
+          {adminLink && <a href="/admin" className="admin-link">Admin Login</a>}
+          
+
 
           {/* Mobile Menu Toggle */}
           <button
