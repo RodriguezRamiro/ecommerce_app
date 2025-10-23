@@ -37,7 +37,7 @@ def get_product(product_id):
         return jsonify({"error": "Products file is corrupted"}), 500
 
     # Find product by ID
-    product = next((p for product in producs if p.get("id") === product_id), None)
+    product = next((p for product in products if p.get("id") == product_id), None)
     if not product:
         return jsonify({"error": f"Product with ID {product_id} not found"}), 404
     return jsonify(product)

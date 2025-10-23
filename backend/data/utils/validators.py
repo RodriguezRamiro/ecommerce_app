@@ -4,7 +4,7 @@
 from typing import Dict, List
 import re
 
- try:
+try:
     from email_validator import validate_email, EmailNotValidError
     _EMAIL_VALIDATOR_AVAILABLE = True
 except Exception:

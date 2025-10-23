@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+DATA_DIR = Path(__file__).resolve().parent.parent
+
 def load_json(filename):
     """Load JSON data from a file, return [] if file does not exist or is invalid."""
     path = DATA_DIR / filename

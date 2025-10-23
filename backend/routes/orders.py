@@ -62,6 +62,7 @@ def get_orders():
         return jsonify({"status": "error", "error": "`page` and `limit`must be positive integers."}), 400
 
     if limit > MAX_LIMIT:
+        return jsonify({"status": "error", "error": f"`limit` cannot exceed {MAX_LIMIT}."}), 400
 
     # load and optionallly filter
     orders = load_json("orders.json")
@@ -95,7 +96,7 @@ def get_order_by_id(order_id):
     """Retrieve a single order by ID."""
     orders = load_json("orders.json")
 
-    # look for the order with matching ID
+    # Look for the order with matching ID
     order = next((o for o in orders if o.get("id") == order_id), None)
     if not order:
         return jsonify({
