@@ -1,10 +1,9 @@
 //src/pages/Shop.jsx
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import products from "../data/products";
 import ProductList from "../components/ProductList";
 import "./styles/Shop.css";
 
@@ -12,9 +11,32 @@ export default function Shop() {
 
     const { addToCart } = useCart();
 
+    // State for backend Products
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
     // State for filters and sorting
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [sortOption, setSortOption] = useState(''); // "", "lowToHigh", "highToLow"
+
+    //Fetch from backend on mount
+    useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const res = await fetch("/api/products");
+          if (!res.ok) throw new Error("failed to fetch products");
+          const data = await res.json();
+          setProducts(data);
+        } catch (err) {
+          console.error("Error fetching products:", err);
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchProducts();
+    }, []);
 
     // Derived product list
     const displayProducts = useMemo(() => {
@@ -33,8 +55,9 @@ export default function Shop() {
         filtered.sort((a, b) => b.price - a.price);
     }
     return filtered;
-    }, [selectedCategory, sortOption]);
+    }, [products, selectedCategory, sortOption]);
 
+    if (loading) return <p className="loading-text">Loading product...</p>
 
     return (
       <div className="shop-container">

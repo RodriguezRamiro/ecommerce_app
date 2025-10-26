@@ -1,15 +1,19 @@
 # backend/routes/orders.py
 
 from flask import Blueprint, jsonify, request
+from datetime import datetime
 from data.utils.file_manager import load_json, save_json
 import uuid
 
 orders_bp = Blueprint("orders", __name__)
 
 # Allowed fields to be updated
-ALLOWED_FIELDS ={"customer_name", "items", "total", "status"}
+ALLOWED_FIELDS = {"customer_name", "items", "total", "status"}
 
 MAX_LIMIT = 100 # Avoid huge responses
+
+ORDERS_FILE = "orders.json"
+
 
 @orders_bp.route("/", methods=["POST"])
 def create_order():
@@ -25,18 +29,23 @@ def create_order():
             "error": f"Missing fields: {', '.join(missing)}"
         }), 400
 
-    # Assign a unique ID
-    data["id"] = str(uuid.uuid4())
-    data.setdefault("status", "pending")
-
     # Load existing orders
     orders = load_json("orders.json")
+
+    # Auto increment numeric ID
+    new_id = max([o.get("id", 0) for o in orders], default=0) + 1
+    data["id"] = new_id
+
+    # Set defaults
+    data.setdefault("status", "pending")
+    data["date"] = datetime.now().strftime("%Y-%m-%d")
+
 
     # Add the new order
     orders.append(data)
 
     # Save updated list
-    save_json("orders.json", orders)
+    save_json(ORDERS_FILE, orders)
 
     # Respond
     return jsonify({"status": "success", "order": data}), 201
@@ -46,7 +55,7 @@ def create_order():
 def get_orders():
     """
     Retrieve all orders.
-    GET /api/orders?page=1&limit=10
+    GET /api/orders?page=1&limit=10&status=pending
     Returns paginated list of orders plus meta onbject and X-Total-Count header.
     Optional: filter by ?status=pending (simple excat-match filter).
     """
@@ -87,7 +96,7 @@ def get_orders():
     }
 
     response = jsonify({"meta": meta, "orders": page_items})
-    response.headers["X-Total_Count"] = sstr(total)
+    response.headers["X-Total_Count"] = str(total)
     return response, 200
 
 
@@ -120,7 +129,7 @@ def update_order(order_id):
         }), 400
 
 
-    orders= load_json("orders.json")
+    orders = load_json("orders.json")
 
     for idx, order in enumerate(orders):
         if order.get("id") == order_id:
@@ -129,7 +138,7 @@ def update_order(order_id):
                 if key in ALLOWED_FIELDS:
                     orders[idx][key] = value
 
-            save_json("orders.json", orders)
+            save_json(ORDERS_FILE, orders)
             return jsonify({
                 "status": "sucess",
                 "order": orders[idx]
@@ -144,14 +153,14 @@ def update_order(order_id):
 @orders_bp.route("/<order_id>", methods=["DELETE"])
 def delete_order(order_id):
     """Delete an order by ID."""
-    orders = load_json("orders.json")
+    orders = load_json(ORDERS_FILE)
     new_orders = [o for o in orders if o.get("id") != order_id]
 
     if len(new_orders) == len(orders):
         return jsonify({
             "status": "error",
             "error": f"Order with ID {order_id} not found"
-        }), 400
+        }), 404
 
     save_json("orders.json", new_orders)
     return jsonify({
