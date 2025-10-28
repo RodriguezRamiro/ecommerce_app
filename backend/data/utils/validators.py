@@ -1,4 +1,4 @@
-# //backend/utils/validators.py
+# //backend/data/utils/validators.py
 
 
 from typing import Dict, List
@@ -55,5 +55,43 @@ def validate_contact_form(data: dict) -> Dict[str, List[str]]:
         errors.setdefault("message", []).append("Message is required.")
     elif len(message) < 10:
         errors.setdefault("message", []).append("Message must be at least 10 characters.")
+
+    return errors
+
+def validate_product_data(data: dict) -> Dict[str, List[str]]:
+    """
+    Validate product payload for /api/products endpoin.
+
+    Returns:
+        errors: dic mapping field -> list of error messages. Empty dict means valid.
+        """
+    errors = {}
+
+    name = (data.get("name") or "").strip()
+    price = data.get("price")
+    category = (data.get("category") or "").strip()
+
+    # Name checks
+    if not name:
+        errors.setdefault("name", [].append("product name is required.")
+    elif len(name) < 3:
+        errors.setdefault("name", []).append("Product naame must be at least 3 charracters.")
+
+    # Price chekcs
+    if price is None:
+    errors.setdefault("price", []).append("price is required.")
+    else:
+        try:
+            price_value = float(price)
+            if price_value <= 0:
+                errors.setdefault("price", []).append("Price must be greater than 0.")
+        except (ValueError, TypeError):
+            errors.setdefault("price", []).append("price must be a valid number.")
+
+    # Category checks
+    if not category:
+        errors.setdefault("category", []).append("Category is required.")
+    elif len(category) <2:
+        errors.setdefault("category", []).append("category must be at least 2 characters.")
 
     return errors
