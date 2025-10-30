@@ -3,7 +3,7 @@
 from flask import Blueprint, jsonify, request
 from pathlib import Path
 import json
-from utils.validators import validate_product_data
+from backend.data.utils.validators import validate_product_data
 
 
 # Blueprint

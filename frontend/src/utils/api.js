@@ -1,85 +1,77 @@
 // frontend/src/utils/api.js
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
 
 
 
-
-/**
- * Response handler
- *
- */
-
-async function handleResponse(res) {
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData?.error || "Request failed");
-    }
-    return res.json();
-  }
-
-/**
- * Fetch all products
- *
- */
-
-
-export async function fetchProducts() {
-    const res = await fetch(`${API_BASE}/products`);
-    return handleResponse(res);
-
-}
-
-/**
- * Submit contact form
- */
-
-export async function submitContactForm(data) {
-  const res = await fetch(`${API_BASE}/contact`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    const errData = await res.json().catch(() => ({}));
-    throw new Error(errData?.errors?.join(", ") || "Failed to submit contact form");
-  }
-
-  return res.json();
-}
-
-/**
- * Health check
- */
-
-export async function checkHealth() {
-    const res = await fetch(`${API_BASE}/health`);
-    if (!res.ok) throw new Error("Health check failed");
-    return res.json();
-  }
-
-  export default API_BASE;
 
   /**
- * Create a new order
- * @param {Object} orderData
- */
+   * Helper for POST requests
+  */
 
-  export async function createOrder(orderData) {
-    const res = await fetch(`${API_BASE}/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
-    return handleResponse(res);
+ async function postRequest(endpoint, data) {
+   try {
+     const res = await fetch(`${BASE_URL}${endpoint}`, {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      return { success: false, errors: errData.errors || ["Request failed"] };
+    }
+
+      const result = await res.json();
+      return result;
+    } catch (err) {
+      console.error(`Error posting to ${endpoint}:`, err);
+      return { success: false, errors: ["Network error."] };
+    }
   }
-/**
- * Fetch all orders
- */
 
-export async function fetchOrders() {
-    const res = await fetch(`${API_BASE}/orders`);
-    if (!res.ok) throw new Error("Failed to fetch orders");
-    return res.json();
-}
+  /**
+   * Contact Form
+  */
+
+ export async function submitContactForm(formData) {
+   return postRequest("/contact", formData);
+  }
+
+  /**
+   * Order Creation
+  */
+
+ export async function createOrder(orderData) {
+   return postRequest("/order", orderData);
+  }
+
+  /**
+   * Fetch Products (optional future)
+   */
+  export async function fetchProducts() {
+    try {
+      const res = await fetch(`${BASE_URL}/products`);
+      if (!res.ok) throw new Error("Failed to fetch products");
+      return await res.json();
+    } catch (err) {
+      console.error("fetchProducts error:", err);
+      return [];
+    }
+  }
+
+  /**
+   * Health Check
+  */
+ export async function checkHealth() {
+   try {
+     const res = await fetch(`${BASE_URL}/health`);
+     if (!res.ok) throw new Error("Health check failed");
+     return await res.json();
+    } catch (err) {
+      console.error("Health check error:", err);
+      return { status: "offline" };
+    }
+  }

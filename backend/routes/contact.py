@@ -1,8 +1,8 @@
 # backend/routes/contact.py
 
 from flask import Blueprint, jsonify, request
-from data.utils.file_manager import load_json, save_json
-from data.utils.validators import validate_contact_form
+from backend.data.utils.file_manager import load_json, save_json
+from backend.data.utils.validators import validate_contact_form
 
 contact_bp = Blueprint("contact", __name__)
 

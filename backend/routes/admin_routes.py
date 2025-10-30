@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 import jwt
 import datetime
 from functools import wraps
-from data.utils.file_manager import load_json, save_json
+from backend.data.utils.file_manager import load_json, save_json
 import uuid
 
 

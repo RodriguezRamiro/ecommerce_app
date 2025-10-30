@@ -1,7 +1,8 @@
 //frontend/src/components/ProductGrid.jsx
 
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ProductCard from "./ProductCard";
 import ProductCard from "./ProductCard";
 import "./styles/ProductGrid.css";
 
@@ -37,9 +38,42 @@ const mockProducts = [
 ];
 
 export default function ProductGrid({ onAddToCart }) {
+  const [product, setProducts] = useState(mockProducts);
+  const [loading, setLoading] = useState(true);
+  const [usingMock, setUsingMock] = useState(false);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const data = await fetchProducts();
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+          console.log("loaded products from backend");
+        } else {
+          console.warn("Backend retruned no data, using mock");
+          setUsingMock(true);
+        }
+      } catch (err) {
+        console.warn("Backend unavailable, using mock data:", err.message);
+        setUsingMock(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return <p className="loading-text">Loading Products...</p>
+  }
+
   return (
     <section className="product-grid-section">
-      <h2 className="product-grid-title">Products</h2>
+      <h2 className="product-grid-title">
+        Products {usingMock && <span>(demo data)</span>}
+        </h2>
+        
       <div className="product-grid">
         {mockProducts.map((product) => (
           <ProductCard

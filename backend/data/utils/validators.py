@@ -73,13 +73,13 @@ def validate_product_data(data: dict) -> Dict[str, List[str]]:
 
     # Name checks
     if not name:
-        errors.setdefault("name", [].append("product name is required.")
+        errors.setdefault("name", []).append("product name is required.")
     elif len(name) < 3:
         errors.setdefault("name", []).append("Product naame must be at least 3 charracters.")
 
     # Price chekcs
     if price is None:
-    errors.setdefault("price", []).append("price is required.")
+        errors.setdefault("price", []).append("price is required.")
     else:
         try:
             price_value = float(price)

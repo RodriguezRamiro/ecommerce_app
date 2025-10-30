@@ -16,7 +16,7 @@ export default function Contact() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...prev, [name]: value });
+    setFormData((prev ) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -25,20 +25,25 @@ export default function Contact() {
     setErrors([]);
 
     try {
+      // try backend first
       const res = await submitContactForm(formData);
 
-      if (!res.success) {
+      if (res.errors && Object.keys(res.errors).length > 0) {
         // display validation errors from backend
-        setErrors(res.errors || ['Failed to submit the form.']);
+        const combinedErrors = Object.entries(res.errors)
+        .flatmap(([field, msgs]) => msgs.map((msg) => `${field}: ${msg}`));
+        setErrors(combinedErrors)
         return;
       }
 
-       // If successful
+       // successful response from backend
        setStatus('Message sent successfully!');
        setFormData({ name: '', email: '', message: '' });
      } catch (err) {
-       console.error(err);
-       setErrors(['An unexpected error occurred. Please try again later.']);
+       console.warn("Backend unreachable, simulating sucess:", err.message);
+       // Simulate mock success
+       setStatus("(Demo) Message sent successfully!");
+       setFormData({ name: "", email: "", message: "" });
      }
    };
 

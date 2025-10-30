@@ -1,7 +1,7 @@
 # //backend/app.py
 
 from flask import Flask, jsonify, request
-from routes.admin_routes import admin_bp
+from backend.routes.admin_routes import admin_bp
 from flasgger import Swagger
 from flask_cors import CORS
 from pathlib import Path
@@ -15,10 +15,11 @@ CORS(app)
 swagger = Swagger(app)
 
 # Import Blueprints
-from routes.products import products_bp
-from routes.contact import contact_bp
-from routes.orders import orders_bp
-from routes.health import health_bp
+from backend.routes.admin_routes import admin_bp
+from backend.routes.products import products_bp
+from backend.routes.contact import contact_bp
+from backend.routes.orders import orders_bp
+from backend.routes.health import health_bp
 
 # Register Blueprints
 app.register_blueprint(products_bp, url_prefix="/api/products")
