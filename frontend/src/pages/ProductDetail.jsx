@@ -1,21 +1,44 @@
 // frontend/src/pages/ProductDetail.jsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import products from "../data/products.js";
+import { fetchProductById } from "../utils/api";
 import "./styles/ProductDetail.css";
 
 export default function ProductDetail() {
     const { id } = useParams();
     const { addToCart } = useCart(); // get addToCArt
-    const product = products.find((p) => p.id === parseInt(id));
+    const [product, setProduct] = useState(null)
     const [quantity, setQuantity] = useState(1);
+    const [loading, setLoading] = useState(true);
 
-    if (!product) {
-        return <p className="not-found">Product not found.</p>;
+    // Fetch product (back or mock depends on env)
+    useEffect(() => {
+      async function loadProduct() {
+        const data = await fetchProductById(Number(id));
+        setProduct(data);
+        setLoading(false);
+      }
+      loadProduct();
+    }, [id]);
+
+    // Loading state
+    if (loading) {
+      return <p className="loading">Loading product...</p>;
+    }
+
+    // Product not found
+    if (!product || product.error) {
+        return (
+        <div>
+          <p className="not-found">Product not found.</p>
+        <Link to="/shop" className="back-linck">← Back to Shop</Link>";
+        </div>
+        );
       }
 
+      // Add to cart
       const handleAddToCart = () => {
         addToCart(product, quantity);
         console.log(`✅ Added ${quantity} × ${product.name} to cart`);
@@ -29,7 +52,6 @@ export default function ProductDetail() {
           </Link>
 
           <div className="product-detail-card">
-
             {/* Image */}
             <div className="product-image">
               <img

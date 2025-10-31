@@ -24,26 +24,46 @@ It started from a minimal Vite React template and has been **refactored to remov
 backend/
 │
 ├── app.py                # Main entry point
+├── __init__.py
+|
+├── data/                 # JSON mock data
+|   ├── utils/                # Utility/helper functions
+|   |   ├── __init__.py
+|   |   |── file_manager.py
+|   |   └── validators.py     # For form validation
+|   |── __init__.py
+|   |── messages.json
+|   |── orders.json
+│   |── products.json
+|
+├── Models/
+|   └── __init__.py
+|
 ├── routes/               # All route files
 │   ├── __init__.py
-│   ├── products.py
+|   ├── admin_routes.py
 │   ├── contact.py
-│   ├── orders.py
 │   └── health.py
+│   ├── orders.py
+│   ├── products.py
 │
-├── data/                 # JSON mock data
-│   └── products.json
+├── tests/               # tests
+│   └── test_validators.py
 │
-└── utils/                # Utility/helper functions
-    ├── __init__.py
-    └── validators.py     # For form validation
+└── requirements.txt
+
+
 
 frontend/
+
+├── public/
+|   ├── data/
+        └──stores.json
 ├── src/
 │ ├── components/ # Reusable components (Navbar, Button, ProductCard, CartDrawer, etc.)
 │ ├── context/ # Context providers (CartProvider)
 │ ├── data/ # Static product data
-│ ├── pages/ # App pages (Home, Shop, Cart, Checkout, NotFound)
+│ ├── pages/ # App pages (Home, Shop, Cart, Checkout, NotFound,)
 │ ├── App.jsx # Main App component with routing
 │ ├── main.jsx # Entry point with CartProvider
 │ ├── index.css # Global CSS

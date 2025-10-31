@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { fetchProducts } from "../utils/api"; //<<-----||| left off here
 import "./styles/Products.css";
 
 export default function Products() {
@@ -13,20 +14,24 @@ export default function Products() {
   const {addToCart } = useCart();
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function loadProducts() {
       try {
-        const res = await fetch("http://localhost:5000/api/products");
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const data = await res.json();
+        const data = await fetchProducts();
+
+        if (!data || data.length === 0){
+           throw new Error("No products available at this time");
+        }
+
         setProducts(data);
       } catch (err) {
+        console.error("Product fetch error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchProducts();
+    loadProducts();
   }, []);
 
   if (loading) return <p className="loading">Loading products...</p>;

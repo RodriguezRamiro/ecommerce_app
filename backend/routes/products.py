@@ -121,7 +121,7 @@ def update_product(product_id):
                 with PRODUCTS_FILE.open("w") as f:
                     json.dump(products, f, indent=2)
                 print(f"Updated product {product_id}: {product}")
-                return jsonify(p), 200
+                return jsonify(product), 200
 
         return jsonify({"error": f"Product with ID {product_id} not found"}), 400
 

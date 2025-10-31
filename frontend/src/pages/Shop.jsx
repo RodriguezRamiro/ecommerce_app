@@ -21,20 +21,21 @@ export default function Shop() {
     const [sortOption, setSortOption] = useState(''); // "", "lowToHigh", "highToLow"
 
     //Fetch from backend on mount
+
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const res = await fetch("/api/products");
+          const baseUrl = import.meta.env.VITE_API_URL || "";
+          const res = await fetch(`${baseUrl}/products`);
           if (!res.ok) throw new Error("failed to fetch products");
           const data = await res.json();
           setProducts(data);
         } catch (err) {
           console.error("Error fetching products:", err);
         } finally {
-          setLoading(false)
+          setLoading(false);
         }
-      }
-
+      };
       fetchProducts();
     }, []);
 

@@ -3,10 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-
 import "./styles/Navbar.css";
 
-export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink }) {
+export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink, serverStatus }) {
   const [mobileOpen, setMobileOpen] = useState(false);
     const location = useLocation();
     const { cartCount } = useCart();
@@ -62,6 +61,17 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink 
 
         {/* Right side buttons */}
         <div className="nav-actions">
+          {/* Server Status Indicator */}
+          <span className={`server-dot ${serverStatus}`}
+          title={
+            serverStatus === "online"
+            ? "Backend connected"
+            : serverStatus === "offline"
+            ? "Backend offline"
+            : "checking..."
+          }
+          ></span>
+
           {/* Dark Mode Toggle */}
           <button className="dark-toggle"
             onClick={() => setDarkMode(!darkMode)}
@@ -77,8 +87,6 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink 
 
           {/* admin link to be removed after backend integration */}
           {adminLink && <a href="/admin" className="admin-link">Admin Login</a>}
-          
-
 
           {/* Mobile Menu Toggle */}
           <button
