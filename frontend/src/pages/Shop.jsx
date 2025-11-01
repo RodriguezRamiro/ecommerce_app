@@ -4,7 +4,8 @@ import React, { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import ProductList from "../components/ProductList";
+import ProductList from "../components/ProductList"
+import mockProducts from "../data/products";
 import "./styles/Shop.css";
 
 export default function Shop() {
@@ -15,7 +16,6 @@ export default function Shop() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
     // State for filters and sorting
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [sortOption, setSortOption] = useState(''); // "", "lowToHigh", "highToLow"
@@ -23,15 +23,26 @@ export default function Shop() {
     //Fetch from backend on mount
 
     useEffect(() => {
-      const fetchProducts = async () => {
+      async function fetchProducts() {
+        const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+        const baseUrl = import.meta.env.VITE_API_URL || "";
+
+        //If mock mode -> skip backend and use local fallback
+        if (USE_MOCK) {
+          console.log("Using Mock prodcuts (front end only mode)");
+          setProducts(mockProducts);
+          setLoading(false);
+          return;
+        }
+
         try {
-          const baseUrl = import.meta.env.VITE_API_URL || "";
           const res = await fetch(`${baseUrl}/products`);
           if (!res.ok) throw new Error("failed to fetch products");
           const data = await res.json();
           setProducts(data);
         } catch (err) {
-          console.error("Error fetching products:", err);
+          console.error("falling back to mock data", err.message);
+          setProducts(mockProducts);
         } finally {
           setLoading(false);
         }

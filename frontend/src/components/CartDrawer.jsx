@@ -182,9 +182,9 @@ export default function CartDrawer({ isOpen, onClose }) {
               <Link to="/cart" onClick={onClose} className="view-cart-btn">
                 View Cart
               </Link>
-              
+
               {/* Check out order */}
-              <button onClick={handleCheckout} className="checkout-btn">
+              <button onClick={() => navigate("/payment")} className="checkout-btn">
                 Checkout
               </button>
             </div>

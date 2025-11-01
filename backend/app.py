@@ -84,6 +84,11 @@ def create_order():
     print("New order received:", data)
     return jsonify({"status": "success", "order": data}), 201
 
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def catch_all(path):
+    return app.send_static_file("index.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -121,7 +121,7 @@ export default function Cart() {
             </div>
 
             {/* Checkout button */}
-            <button onClick={handleCheckout} className="checkout-btn full-width">
+            <button onClick={() => navigate("/payment")} className="checkout-btn full-width">
               Proceed to Checkout
             </button>
             <Link to="/shop" className="continue-shopping-btn">

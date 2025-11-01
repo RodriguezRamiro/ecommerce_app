@@ -12,11 +12,12 @@ import { checkHealth } from "./utils/api";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
-import Confirmation from "./pages/Confirmation";
 import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
+import Payment from "./pages/Payment";
+import Confirmation from "./pages/Confirmation";
 import StoreLocator from "./pages/StoreLocator";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -64,6 +65,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/store-locator" element={<StoreLocator />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/payment" element={<Payment />} />
               <Route path="/confirmation" element={<Confirmation /> } />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminDashboard />} />
