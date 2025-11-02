@@ -2,30 +2,51 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import "./styles/Payment.css";
 
 export default function Payment() {
-    const [cardName, setCardName] = useState("");
-    const [cardNumber, setCardNumber] = useState("");
-    const [expiry, setExpiry] = useState("");
-    const [cvv, setCvv] = useState("");
-    const navigate = useNavigate();
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefuault();
+  const navigate = useNavigate();
+  const { cart, placeOrder, isProcessing } = useCart();
 
-        //Demo effect - pretend to process payment
-        setTimeout(() => {
-            console.log("Mock payment successfull");
-            navigate("/confirmation")
-        }, 1000);
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Mock Validation for Realism
+    if (!cardName || !cardNumber || !expiry || !cvv) {
+      alert("Please fill in all fields (demo only).");
+      return;
+    }
+
+    // Demo Order olacement
+    const order = await placeOrder();
+
+    if (order) {
+      console.log("💳 Demo payment successful:", order);
+      navigate("/confirmation");
+    } else {
+      alert("Payment failed. Please try again.");
+    }
+  };
+
+
 
     return (
         <div className="payment-page">
             <h2>Paymnet information</h2>
-            <p className="demo-note"> Demo only - no real payment is processed.</p>
+            <p className="demo-note"> <strong>Demo only</strong> — no real payment is processed. Any input will work.</p>
 
+            {isProcessing ? (
+                <div className="processing-indicator">
+                    <div className="spinner" />
+                    <p>Processsing your demo Payment...</p>
+                    </div>
+             ) : (
             <form className="payment-form" onSubmit={handleSubmit}>
                 <label>
                     Name on Card
@@ -33,6 +54,7 @@ export default function Payment() {
                 type="text"
                 value={cardName}
                 onChange={(e) => setCardName(e.target.value)}
+                placeholder="Name"
                 required
                 />
                 </label>
@@ -75,6 +97,7 @@ export default function Payment() {
                 Complete Payment
             </button>
         </form>
+             )}
     </div>
     );
 }

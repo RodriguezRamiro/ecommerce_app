@@ -18,6 +18,8 @@ export function CartProvider({ children }) {
   });
 
   const [lastOrder, setLastOrder] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] =useState(null);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -54,52 +56,86 @@ export function CartProvider({ children }) {
   // Clear cart
   const clearCart = () => setCart([]);
 
-  // Total items in cart
+  // Totals
   const cartCount = cart.reduce((total, item) => total + item.qty, 0);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxRate = 0.07; //7%
+  const taxRate = 0.07;
   const tax = subtotal * taxRate;
   const total = subtotal + tax;
 
-  // Generate & store order details when user check out
-  const placeOrder = () => {
-    if(cart.length === 0 ) return null;
+  // Place Order (demo flow)
+  const placeOrder = async () => {
+    if (cart.length === 0) return null;
 
-  const orderNumber = Math.floor(100000 + Math.random() * 900000); //6-digit random number
+    setIsProcessing(true);
+    setError(null);
 
-  const orderData = {
-    orderNumber,
-    item: cart,
-    subtotal,
-    tax,
-    total,
-    date: new Date().toISOString(),
-  };
+    try {
+      // Artificical delay to simulate processing
+      await new Promise((res) => setTimeout(res, 2000));
 
-  setLastOrder(orderData);
-  clearCart();   // reset cart after placing order
+      const orderNumber = Math.floor(100000 + Math.random() * 900000);
 
-  return orderData;
-};
+      const orderData = {
+        orderNumber,
+        items: cart,
+        subtotal,
+        tax,
+        total,
+        date: new Date().toISOString(),
+        status: "confirmed",
+      };
 
-return (
-  <CartContext.Provider
-    value={{
-      cart,
-      addToCart,
-      removeFromCart,
-      updateQty,
-      clearCart,
-      cartCount,
-      subtotal,
-      tax,
-      total,
-      lastOrder,
-      setLastOrder,
-      placeOrder,
-    }}
-  >
-    {children}
-  </CartContext.Provider>
-);
-}
+      // DEMO Mode - simulate order success
+      setLastOrder(orderData);
+      clearCart();
+
+      // Live payment Processing
+      /*
+      const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+      trhow new Error("Failed to process order");}
+    }
+      const savedOrder = await response.json();
+      setLastOrder(savedOrder);
+      clearCart();
+      */
+
+      return orderData;
+    } catch (err) {
+      console.error("Order Error:", err);
+      setError("something went wrong while placing your order.");
+      return null;
+    } finally {
+      setIsProcessing(false);
+    }
+    };
+
+    return (
+      <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQty,
+        clearCart,
+        cartCount,
+        subtotal,
+        tax,
+        total,
+        lastOrder,
+        setLastOrder,
+        placeOrder,
+        isProcessing,
+        error,
+      }}
+    >
+      {children}
+      </CartContext.Provider>
+    );
+  }

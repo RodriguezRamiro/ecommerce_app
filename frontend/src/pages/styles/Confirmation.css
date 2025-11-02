@@ -1,39 +1,47 @@
 .confirmation-page {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    color: #333;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    animation: fadeIn 0.4s ease-in;
-  }
+  max-width: 650px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, #333);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.4s ease-in;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+h2 {
+  color: var(--primary-color, #222);
+  margin-bottom: 0.5rem;
+}
 
-  .order-details {
-    margin-top: 1.5rem;
-    text-align: left;
-  }
+.order-number {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--accent-color, #555);
+}
 
-  .order-items {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-  }
+.order-details {
+  margin-top: 1.5rem;
+  text-align: left;
+}
 
-  .order-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #f2f2f2;
-  }
+.order-items {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+ .order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f5f5f5;
+}
 
   .order-item:last-child {
     border-bottom: none;
@@ -44,33 +52,49 @@
     font-size: 0.95rem;
   }
 
-  .order-total {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 0.5rem;
-  }
+.order-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color, #000);
+  margin-top: 0.5rem;
+  border-top: 1px solid #ddd;
+  padding-top: 0.5rem;
+}
 
-  .confirmation-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
+ .confirmation-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
 
-  .confirmation-actions button {
-    padding: 0.6rem 1.2rem;
-    background: var(--primary-color, #222);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
+.confirmation-actions button {
+  padding: 0.7rem 1.4rem;
+  background: var(--primary-color, #222);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
 
-  .confirmation-actions button:hover {
-    background: var(--accent-color, #444);
+ .confirmation-actions button:hover {
+  background: var(--accent-color, #444);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   @media (max-width: 500px) {
     .confirmation-page {
@@ -83,28 +107,27 @@
 
     .confirmation-actions button {
       width: 100%;
-      text-align: center;
     }
   }
 
   @media print {
-    body * {
-      visibility: hidden;
-    }
+  body * {
+    visibility: hidden;
+  }
 
-    .confirmation-page,
-    .confirmation-page * {
-      visibility: visible;
-    }
+  .confirmation-page,
+  .confirmation-page * {
+    visibility: visible;
+  }
 
     .confirmation-page {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-    }
-
-    .confirmation-actions {
-      display: none;
-    }
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
+
+ .confirmation-actions {
+    display: none;
+  }
+}

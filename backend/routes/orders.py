@@ -168,3 +168,43 @@ def delete_order(order_id):
         "message": f"Order {order_id} deleted"
 
     }), 200
+
+@orders_bp.route("/process_payment", methods=["POST"])
+def process_payment():
+    """Simulate payment processing and create ann order."""
+    data = request.get_json() or {}
+    required = ["customer_name", "items", "subtotal"]
+
+    # Validate
+    missing = [f for f in required if f not in data]
+    if missing:
+        return jsonify({"status": "error", "error": f"Missing gields: {', '.join(missing)}"}), 400
+
+    #Simulate payment success
+    tax_rate = 0.07
+    tax = round(data["subtotal"] * tax_rate, 2)
+    total = round(data["subtotal"] + tax, 2)
+
+    # Create new order Entry
+    orders = load_json(ORDERS_FILE)
+    new_id = max([o.get("id", 0) for o in orders], default=0) + 1
+    order ={
+        "id": new_id,
+        "customer_name": data["customer_name"],
+        "items": data["items"],
+        "subtotal": data["subtotal"],
+        "subtottal": data["subtotal"],
+        "tax": tax,
+        "total": total,
+        "status": "paid",
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    orders.append(order)
+    save_json(ORDERS_FILE, orders)
+
+    return jsonify({
+        "status": "sucess",
+        "message": "Payment processedsuccessfully.",
+        "order": order
+    }), 201

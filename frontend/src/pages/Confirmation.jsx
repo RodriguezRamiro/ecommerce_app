@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import "./styles/Confirmation.css";
 
 
 export default function Confirmation() {
@@ -36,52 +37,60 @@ export default function Confirmation() {
             <p> We've recieved your order and are preparing it for shipment.</p>
 
             {/* Order Summary */}
-            {lastOrder ? (
-        <div className="order-details">
-          <p>
-            <strong>Order #:</strong>{orderNumber}
-          </p>
-            {lastOrder.items && lastOrder.items.length > 0 ? (
-          <ul className="ordere-items">
+      <div className="order-details">
+        <p className="order-number">
+          <strong>Order #:</strong> {orderNumber}
+        </p>
+
+        {lastOrder.items && lastOrder.items.length > 0 ? (
+          <ul className="order-items">
             {lastOrder.items.map((item) => (
               <li key={item.id} className="order-item">
                 <span className="item-name">{item.name}</span>
                 <span className="item-qty">x {item.qty}</span>
                 <span className="item-price">
-                ${(item.price * item.qty).toFixed(2)}
+                  ${(item.price * item.qty).toFixed(2)}
                 </span>
               </li>
             ))}
           </ul>
-            ) : (
-                <p>No items found in your order.</p>
-            )}
+        ) : (
+          <p>No items found in your order.</p>
+        )}
 
-          <div className="order-summary">
-            <p>
-              <strong>Subtotal:</strong> ${lastOrder.subtotal.toFixed(2)}
-              ${lastOrder?. subtotal?.toFixed(2) || "0.00"}
-            </p>
-            <p>
-              <strong>Tax (7%):</strong> ${lastOrder.tax.toFixed(2) || "0.00"}
-            </p>
-            <p className="order-total">
-              <strong>Total:</strong> ${lastOrder.total.toFixed(2)  || "0.00"}
-            </p>
-          </div>
-          </div>
-      ) : (
-        <p>No recent order found. Kindly return to the Shop</p>
-      )}
+        <div className="order-summary">
+          <p>
+            <strong>Subtotal:</strong> $
+            {lastOrder?.subtotal?.toFixed(2) || "0.00"}
+          </p>
+          <p>
+            <strong>Tax (7%):</strong> $
+            {lastOrder?.tax?.toFixed(2) || "0.00"}
+          </p>
+          <p className="order-total">
+            <strong>Total:</strong> $
+            {lastOrder?.total?.toFixed(2) || "0.00"}
+          </p>
+        </div>
+      </div>
 
-        <div className="confirmation-actions">
-        {/* Print reciept button */}
-        <button onClick={() => window.print()}>Print Receipt / Save as PDF</button>
-        {/* Back to Home Button */}
-        <button onClick={() => navigate("/")}>Back to Home</button>
-        { /* Back to Shop Button */}
-        <button onClick={() => navigate("/shop")}>Continue Shopping</button>
-    </div>
+      <div className="confirmation-actions">
+        <button onClick={() => window.print()}> Print / Save as PDF</button>
+        <button onClick={() => navigate("/")}> Back to Home</button>
+        <button onClick={() => navigate("/shop")}> Continue Shopping</button>
+      </div>
+
+      {/* 🔹 Future Backend Hook (Commented Out) */}
+      {/*
+        useEffect(() => {
+          async function fetchOrder() {
+            const res = await fetch(`/api/orders/${orderNumber}`);
+            const data = await res.json();
+            setOrder(data);
+          }
+          fetchOrder();
+        }, [orderNumber]);
+      */}
     </div>
   );
 }
