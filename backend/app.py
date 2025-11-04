@@ -16,6 +16,7 @@ swagger = Swagger(app)
 
 # Import Blueprints
 from backend.routes.admin_routes import admin_bp
+from routes.user_routes import user_bp
 from backend.routes.products import products_bp
 from backend.routes.contact import contact_bp
 from backend.routes.orders import orders_bp
@@ -27,6 +28,7 @@ app.register_blueprint(contact_bp, url_prefix="/api/contact")
 app.register_blueprint(orders_bp, url_prefix="/api/orders")
 app.register_blueprint(health_bp, url_prefix="/api/health")
 app.register_blueprint(admin_bp, url_prefix="/api/admin")
+app.register_blueprint(user_bp, url_prefix="/api/users")
 
 # Base Route
 @app.route("/")

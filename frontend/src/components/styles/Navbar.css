@@ -161,24 +161,3 @@
       display: block;
     }
   }
-
-
-.server-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.server-dot.online {
-  background-color: #4caf50;
-}
-
-.server-dot.offline {
-  background-color: #f44336;
-}
-
-.server-dot.checking {
-  background-color: #ffeb3b;
-}

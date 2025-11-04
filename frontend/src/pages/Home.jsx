@@ -76,7 +76,9 @@ export default function Home({ onAddToCart }) {
             <h3>Premium Quality</h3><p>Staff hand-selected Items</p>
         </div>
         <div className="value-card">
-            <span className="icon">someicon</span>
+            <span className="icon">🤝</span>
+
+
             <h3>24/7 Support</h3>
             <p> Our team is always here to help you.</p>
         </div>

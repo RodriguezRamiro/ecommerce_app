@@ -1,27 +1,24 @@
 // frontend/src/components/Navbar.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { UserContext } from "../context/UserContext";
 import "./styles/Navbar.css";
 
-export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink, serverStatus }) {
+export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-    const location = useLocation();
-    const { cartCount } = useCart();
+  const location = useLocation();
+  const { cartCount } = useCart();
+  const { user, logout } = useContext(UserContext);
 
 
 
   // Apply dark mode on mount and on toggle
   useEffect(() => {
     const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    root.classList.toggle("dark", darkMode);
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
   const isActive = (path) =>
@@ -61,17 +58,6 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink,
 
         {/* Right side buttons */}
         <div className="nav-actions">
-          {/* Server Status Indicator */}
-          <span className={`server-dot ${serverStatus}`}
-          title={
-            serverStatus === "online"
-            ? "Backend connected"
-            : serverStatus === "offline"
-            ? "Backend offline"
-            : "checking..."
-          }
-          ></span>
-
           {/* Dark Mode Toggle */}
           <button className="dark-toggle"
             onClick={() => setDarkMode(!darkMode)}
@@ -85,8 +71,18 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode, adminLink,
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
 
-          {/* admin link to be removed after backend integration */}
-          {adminLink && <a href="/admin" className="admin-link">Admin Login</a>}
+          {/* User Controls */}
+          {user ? (
+            <>
+              <span className="user-name">Hi, {user.name}</span>
+              <button onClick={logout} className="logout-btn">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="login-link">Login</Link>
+              <Link to="/register" className="register-link">Register</Link>
+            </>
+          )}
 
           {/* Mobile Menu Toggle */}
           <button

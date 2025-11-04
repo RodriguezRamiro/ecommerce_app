@@ -1,15 +1,28 @@
 //frontend/src/components/Footer.jsx
 
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import "./styles/Footer.css";
 
-export default function Footer() {
+
+export default function Footer({ serverStatus }) {
+  const { user } = useContext(UserContext);
+
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-left">
           <h3 className="footer-logo">RodriguezTech Solutions</h3>
           <p>&copy; {new Date().getFullYear()} RodriguezTech. All rights reserved.</p>
+          <p className="status-text">
+            <span className={`server-dot ${serverStatus}`}></span>
+            {serverStatus === "checking"
+              ? "Checking server status..."
+              : serverStatus === "online"
+              ? "Backend: Online (Demo Mode Active)"
+              : "Backend: Offline (Demo Mode Active)"}
+          </p>
+          {user && <p className="user-status">Logged in as {user.email}</p>}
         </div>
 
         <div className="footer-links">

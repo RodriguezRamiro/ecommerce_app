@@ -6,6 +6,7 @@ import "./App.css";
 import CartDrawer from "./components/CartDrawer";
 import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
+import { UserProvider } from "./context/UserContext";
 import { checkHealth } from "./utils/api";
 
 // Pages
@@ -21,7 +22,10 @@ import Confirmation from "./pages/Confirmation";
 import StoreLocator from "./pages/StoreLocator";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserLogin from "./pages/UserLogin";
+import UserRegister from "./pages/UserRegister";
 import NotFound from "./pages/NotFound";
+
 
 
 function App() {
@@ -38,12 +42,13 @@ function App() {
     }
 
     pingServer();
-    //optional: recheck every 60 seconds
+    // recheck every 60 seconds
     const interval = setInterval(pingServer, 60000);
     return () => clearInterval(interval)
   }, []);
 
   return (
+    <UserProvider>
     <CartProvider>
       <Router>
         <div className={`app-container ${darkMode ? "dark-mode" : "light-mode"}`}>
@@ -51,8 +56,7 @@ function App() {
             onToggleCart={() => setIsCartOpen(true)}
             darkMode={darkMode}
             setDarkMode={setDarkMode}
-            adminLink={true}            // add persistance in backend then remove
-            serverStatus={serverStatus}
+            adminLink={true}
           />
 
           <main className="main-content">
@@ -67,13 +71,15 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/payment" element={<Payment />} />
               <Route path="/confirmation" element={<Confirmation /> } />
+              <Route path="/login" element={<UserLogin />} />
+              <Route path="/register" element={<UserRegister />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
 
-          <Footer />
+          <Footer serverStatus={serverStatus}/>
 
           {/* Cart Drawer */}
           <CartDrawer
@@ -82,6 +88,7 @@ function App() {
         </div>
       </Router>
     </CartProvider>
+    </UserProvider>
   );
 }
 
