@@ -2,6 +2,7 @@
 
 from flask import Flask, jsonify, request
 from backend.routes.admin_routes import admin_bp
+from flask_session import Session
 from flasgger import Swagger
 from flask_cors import CORS
 from pathlib import Path
@@ -11,16 +12,16 @@ import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super-secret-key'
 
-CORS(app)
+CORS(app, supports_credentials=True)
 swagger = Swagger(app)
 
 # Import Blueprints
 from backend.routes.admin_routes import admin_bp
-from routes.user_routes import user_bp
 from backend.routes.products import products_bp
 from backend.routes.contact import contact_bp
 from backend.routes.orders import orders_bp
 from backend.routes.health import health_bp
+from backend.routes.user_routes import user_bp
 
 # Register Blueprints
 app.register_blueprint(products_bp, url_prefix="/api/products")
@@ -86,6 +87,8 @@ def create_order():
     print("New order received:", data)
     return jsonify({"status": "success", "order": data}), 201
 
+
+# Catch-all for SPA routing
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):

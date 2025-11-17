@@ -1,46 +1,121 @@
 /* frontend/src/pages/styles/StoreLocator.css */
 
-.store-locator-page {
+.store-locator {
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .store-dropdown {
+    background: white;
+    border: 1px solid #ddd;
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    z-index: 9999;
+    position: relative; /* ensures it isn't hidden */
+  }
+
+  .store-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .store-dropdown li {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .store-dropdown li:last-child {
+    border-bottom: none;
+  }
+
+  .no-results {
+    padding: 6px;
+    color: #777;
+    font-style: italic;
+  }
+
+  /* Full page mode (default) */
+  .store-locator.full {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 2rem auto;
     padding: 2rem;
+  }
+
+  /* Compact mode (appears below navbar) */
+  .store-locator.compact .store-results {
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 90%;
+    max-height: 240px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    z-index: 20;
+    overflow-y: auto;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    animation: dropdownFade 0.2s ease;
+    justify-content: center;
+  }
+
+  /* Animation */
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translate(-50%, -5px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
 }
 
-.store-search-form {
+
+  /* Optional: make it fixed if you want it always visible while scrolling */
+  .store-locator.compact.fixed {
+    position: fixed;
+    top: var(--navbar-height, 60px); /* adjust depending on your navbar height */
+    left: 0;
+  }
+
+  /* Shared styles */
+  .store-search-form {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
+  }
 
-.store-search-form input {
+  .store-search-form input {
     flex: 1;
-    padding:0.5rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid #ccc;
+  }
 
-}
-
-.store-search-form button {
-    padding: 0.5rem 1 rem;
+  .store-search-form button {
+    padding: 0.5rem 1rem;
     background: linear-gradient(90deg, #3b82f6, #a78bfa);
     color: #fff;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-}
+    white-space: nowrap;
+  }
 
-.store-search-form button:hover {
-    background: linear-gradient(90deg, #3b82f6);
-}
+  .store-search-form button:hover {
+    background: #3b82f6;
+  }
 
-.store-results li {
+  .store-results {
+    margin-top: 1rem;
+  }
+
+  .store-results li {
     padding: 0.5rem 0;
     border-bottom: 1px solid #eee;
+  }
 
-}
-
-
-
-.no-results{
+  .no-results {
     color: #777;
-}
+  }

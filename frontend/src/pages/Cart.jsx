@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import StoreLocator from "./StoreLocator";
 import "./styles/Cart.css";
 
 export default function Cart() {
@@ -16,33 +17,11 @@ export default function Cart() {
   };
 
 
-  // Store search state
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-
-  // Mock store data (replace with API call or JSON fetch later)
-  const stores = [
-    { id: 1, name: "Downtown Store", address: "123 Main St, Cityville" },
-    { id: 2, name: "Uptown Store", address: "456 Elm St, Cityville" },
-    { id: 3, name: "Suburb Store", address: "789 Oak St, Townsville" },
-  ];
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-    const filtered = stores.filter(
-      (store) =>
-        store.name.toLowerCase().includes(query.toLowerCase()) ||
-        store.address.toLowerCase().includes(query.toLowerCase())
-    );
-    setResults(filtered);
-  };
-
   return (
     <div className="cart-page">
+      {/* Store Locator */}
+      <StoreLocator compact={true} />
+
       <h2>Your Cart</h2>
 
       {cart.length === 0 ? (
@@ -100,6 +79,7 @@ export default function Cart() {
             </ul>
           </div>
 
+
           {/* Order Summary */}
           <div className="order-summary">
             <h3>Order Summary</h3>
@@ -121,13 +101,18 @@ export default function Cart() {
             </div>
 
             {/* Checkout button */}
-            <button onClick={() => navigate("/payment")} className="checkout-btn full-width">
-              Proceed to Checkout
-            </button>
-            <Link to="/shop" className="continue-shopping-btn">
-              ← Continue Shopping
-            </Link>
-          </div>
+            <div className="checkout-actions">
+                <button
+                  onClick={() => navigate("/payment")}
+                  className="checkout-btn"
+                >
+                  Proceed to Checkout
+                </button>
+                <Link to="/shop" className="continue-shopping-btn">
+                  ← Continue Shopping
+                </Link>
+              </div>
+            </div>
 
           {/* Clear Cart */}
           <div className="cart-actions">
@@ -138,32 +123,6 @@ export default function Cart() {
         </>
       )}
 
-      {/* Store Locator */}
-      <div className="store-search-section">
-        <h3>Find a Store Near You</h3>
-        <form className="store-search-form" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Enter city or ZIP code..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
-
-        <ul className="store-results">
-          {results.length > 0 ? (
-            results.map((store) => (
-              <li key={store.id}>
-                <strong>{store.name}</strong>
-                <div>{store.address}</div>
-              </li>
-            ))
-          ) : (
-            query && <p className="no-results">No Stores Found.</p>
-          )}
-        </ul>
-      </div>
     </div>
   );
 }

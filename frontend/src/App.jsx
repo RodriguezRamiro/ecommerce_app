@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext";
 import { checkHealth } from "./utils/api";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 
 // Pages
 import Home from "./pages/Home";
@@ -22,6 +24,7 @@ import Confirmation from "./pages/Confirmation";
 import StoreLocator from "./pages/StoreLocator";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedAdminRoute from "./components/auth/ProtectedAdminRoute";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import NotFound from "./pages/NotFound";
@@ -71,10 +74,20 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/payment" element={<Payment />} />
               <Route path="/confirmation" element={<Confirmation /> } />
+
+              {/* User auth routes */}
               <Route path="/login" element={<UserLogin />} />
               <Route path="/register" element={<UserRegister />} />
+
+              {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin" element={
+                <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+                }
+             />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

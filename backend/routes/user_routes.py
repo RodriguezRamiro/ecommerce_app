@@ -7,7 +7,7 @@ user_bp = Blueprint("user_bp", __name__)
 # Temporary in-memory "database"
 users = {}
 
-@user_bp.routes("/register", methods=["POST"])
+@user_bp.route("/register", methods=["POST"])
 def register_user():
     data = request.get_json()
     email = data.get("email")
@@ -32,7 +32,7 @@ def login_user():
     if not user or user["password"] != password:
         return jsonify({"error": "Invalid credentials"}), 401
 
-    # Basic session handleing (for recomendation)
+    # Store session info (basic demo handling)
     session["user"] = email
     return jsonify({"message": "Login successful", "user": {"email": email}}), 200
 
@@ -41,7 +41,7 @@ def logout_user():
     session.pop("user", None)
     return jsonify({"message": "Logged out successfully"}), 200
 
-user_bp.route("/current", methods=["GET"])
+@user_bp.route("/current", methods=["GET"])
 def get_current_user():
     user_email = session.get("user")
     if not user_email:

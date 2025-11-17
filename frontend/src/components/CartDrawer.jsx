@@ -1,21 +1,16 @@
 // frontend/src/components/CartDrawer.jsx
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
+import StoreLocator from "../pages/StoreLocator";
 import "./styles/CartDrawer.css";
 
 export default function CartDrawer({ isOpen, onClose }) {
-  const { cart, removeFromCart, updateQty, total, placeOrder } = useCart();
+  const { cart, removeFromCart, updateQty, total, placeOrder, selectedStore, setSelectedStore } = useCart();
+  const [showStorePicker, setShowStorePicker] = useState(false);
   const navigate = useNavigate();
-
-
-  // Store search state
-  const [storesData, setStoresData] = useState([]);
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
 
   const handleCheckout = () => {
@@ -26,42 +21,6 @@ export default function CartDrawer({ isOpen, onClose }) {
     }
   };
 
-  // Load stores JSON on mount
-  useEffect(() => {
-    setLoading(true);
-    fetch("/data/stores.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch stores");
-        return res.json();
-      })
-      .then((data) => {
-        setStoresData(Array.isArray(data) ? data : []);
-        setError(null);
-      })
-      .catch((err) => {
-        console.error("Error fetching stores:", err);
-        setError("Could not load stores. Please try again later.");
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  // Search handler
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-
-    const isZip = /^\d{5}$/.test(query.trim());
-    const filtered = storesData.filter((store) =>
-      isZip
-        ? store.zip.includes(query.trim())
-        : store.name.toLowerCase().includes(query.toLowerCase()) ||
-          store.address.toLowerCase().includes(query.toLowerCase())
-    );
-    setResults(filtered);
-  };
 
   return (
     <AnimatePresence>
@@ -99,35 +58,34 @@ export default function CartDrawer({ isOpen, onClose }) {
               </button>
             </div>
 
-            {/* Store Locator */}
-            <div className="store-search-section">
-              <h3>Find a Store Near You</h3>
-              <form className="store-search-form" onSubmit={handleSearch}>
-                <input
-                  type="text"
-                  placeholder="Enter city or ZIP code..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                <button type="submit">Search</button>
-              </form>
-              {loading && <div className="spinner">Searching...</div>}
-              {error && <p className="error-message">{error}</p>}
-              <ul className="store-results">
-                {!loading && !error && results.length > 0 ? (
-                  results.map((store) => (
-                    <li key={store.id}>
-                      <strong>{store.name}</strong>
-                      <div>{store.address}</div>
-                    </li>
-                  ))
-                ) : (
-                  !loading &&
-                  !error &&
-                  query && <p className="no-results">No Stores Found for "{query}"</p>
-                )}
-              </ul>
+            {/* Store selections */}
+            <div className="drawer-store-section">
+              <div className="drawer-store-header">
+              <span className="drawer-store-name">
+                {selectedStore ? selectedStore.name : "No store selected"}
+                </span>
             </div>
+
+            <button className="drawer-change-store-btn"
+            onClick={() => setShowStorePicker(!showStorePicker)}
+            >
+              {showStorePicker ? "Close" : "Change Store"}
+            </button>
+            </div>
+
+
+            {/* Store Locator */}
+            {showStorePicker && (
+              <div className="cart-store-locator">
+                <StoreLocator
+                  compact={true}
+                  onSelectStore={(store) => {
+                    setSelectedStore(store);
+                    setShowStorePicker(false); // hide on selection
+                  }}
+                />
+              </div>
+            )}
 
             {/* Cart Items */}
             <div className="cart-items">

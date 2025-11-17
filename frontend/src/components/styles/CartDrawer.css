@@ -254,6 +254,51 @@
     animation: spin 0.8s linear infinite;
   }
 
+  .drawer-store-section {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .drawer-store-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+  }
+
+  .drawer-store-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .drawer-store-name {
+    font-weight: bold;
+    color: var(--primary-color, #2a72ff);
+  }
+
+  .drawer-change-store-btn {
+    border: none;
+    background: none;
+    color: #2a72ff;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.85rem;
+    text-decoration: underline;
+  }
+
+  .cart-store-locator ul li {
+    cursor: pointer;
+    padding: 0.4rem 0;
+  }
+
+  .cart-store-locator ul li:hover {
+    background: rgba(0,0,0,0.05);
+  }
+
+
+
+
+
   @keyframes spin {
     to {
       transform: rotate(360deg);

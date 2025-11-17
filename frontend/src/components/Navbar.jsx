@@ -9,7 +9,7 @@ import "./styles/Navbar.css";
 export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { cartCount } = useCart();
+  const { cartCount, selectedStore} = useCart();
   const { user, logout } = useContext(UserContext);
 
 
@@ -58,18 +58,25 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
 
         {/* Right side buttons */}
         <div className="nav-actions">
-          {/* Dark Mode Toggle */}
-          <button className="dark-toggle"
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
+          {/* Store Locatore */}
+          {selectedStore ? (
+            <div className="nav-store-indicator">
+              <span className="store-label">Pickup:</span>
+              <span className="store-name">{selectedStore.name}</span>
+            </div>
+          ) : (
+            <div className="nav-store-indicator">
+              <span className="store-label">Store:</span>
+              <span className="store-name">None Selected</span>
+            </div>
+          )}
 
           {/* Cart */}
           <button className="cart-btn" onClick={onToggleCart}>
           🛒
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
+
 
           {/* User Controls */}
           {user ? (
@@ -83,6 +90,13 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
               <Link to="/register" className="register-link">Register</Link>
             </>
           )}
+
+          {/* Dark Mode Toggle */}
+          <button className="dark-toggle"
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </button>
 
           {/* Mobile Menu Toggle */}
           <button

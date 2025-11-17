@@ -17,9 +17,27 @@ export function CartProvider({ children }) {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Store Selection (persisted)
+  const defaultStore = {
+    id: "Main00-1",
+    name: "Eshop Main",
+    city: "Tampa",
+    zip: 33619
+ }
+
+ const [selectedStore, setSelectedStore] = useState(() => {
+  const saved = localStorage.getItem("selectedStore");
+  return saved ? JSON.parse(saved) : null;
+ });
+
+ useEffect(() => {
+  localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
+}, [selectedStore]);
+
+
   const [lastOrder, setLastOrder] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] =useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -78,6 +96,7 @@ export function CartProvider({ children }) {
 
       const orderData = {
         orderNumber,
+        store: selectedStore,
         items: cart,
         subtotal,
         tax,
@@ -89,22 +108,6 @@ export function CartProvider({ children }) {
       // DEMO Mode - simulate order success
       setLastOrder(orderData);
       clearCart();
-
-      // Live payment Processing
-      /*
-      const response = await fetch("/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-      trhow new Error("Failed to process order");}
-    }
-      const savedOrder = await response.json();
-      setLastOrder(savedOrder);
-      clearCart();
-      */
 
       return orderData;
     } catch (err) {
@@ -133,6 +136,10 @@ export function CartProvider({ children }) {
         placeOrder,
         isProcessing,
         error,
+        // Store related values
+        selectedStore,
+        setSelectedStore,
+        defaultStore,
       }}
     >
       {children}
