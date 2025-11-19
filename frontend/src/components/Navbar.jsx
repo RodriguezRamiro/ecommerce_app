@@ -61,7 +61,7 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
           {/* Store Locatore */}
           {selectedStore ? (
             <div className="nav-store-indicator">
-              <span className="store-label">Pickup:</span>
+              <span className="store-label">Shopping:</span>
               <span className="store-name">{selectedStore.name}</span>
             </div>
           ) : (

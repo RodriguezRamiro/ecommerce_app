@@ -59,6 +59,11 @@ export default function Confirmation() {
         )}
 
         <div className="order-summary">
+        {lastOrder.store && (
+          <p className="order-store">
+            <strong>Store:</strong> {lastOrder.store.name} — {lastOrder.store.city} ({lastOrder.store.zip})
+          </p>
+        )}
           <p>
             <strong>Subtotal:</strong> $
             {lastOrder?.subtotal?.toFixed(2) || "0.00"}

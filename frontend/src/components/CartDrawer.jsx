@@ -1,14 +1,16 @@
 // frontend/src/components/CartDrawer.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
+import { useStore } from "../context/StoreContext";
 import StoreLocator from "../pages/StoreLocator";
 import "./styles/CartDrawer.css";
 
 export default function CartDrawer({ isOpen, onClose }) {
-  const { cart, removeFromCart, updateQty, total, placeOrder, selectedStore, setSelectedStore } = useCart();
+  const { cart, removeFromCart, updateQty, total, placeOrder } = useCart();
+  const { selectedStore, setSelectedStore } = useStore();
   const [showStorePicker, setShowStorePicker] = useState(false);
   const navigate = useNavigate();
 
@@ -33,7 +35,7 @@ export default function CartDrawer({ isOpen, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.3 }}
           />
 
           {/* Drawer */}
@@ -53,35 +55,36 @@ export default function CartDrawer({ isOpen, onClose }) {
             {/* Header */}
             <div className="cart-header">
               <h2>Your Cart</h2>
-              <button onClick={onClose} aria-label="Close cart">
+              <button onClick={onClose}>
                 ✕
               </button>
             </div>
 
-            {/* Store selections */}
+            {/* Store Selection */}
             <div className="drawer-store-section">
-              <div className="drawer-store-header">
-              <span className="drawer-store-name">
-                {selectedStore ? selectedStore.name : "No store selected"}
+              <div className="drawer-store-info">
+                <span className="drawer-store-label">Pickup Store:</span>
+                <span className="drawer-store-name">
+                  {selectedStore ? selectedStore.name : "No store selected"}
                 </span>
+              </div>
+
+              <button
+                className="drawer-change-store-btn"
+                onClick={() => setShowStorePicker(!showStorePicker)}
+              >
+                {showStorePicker ? "Close Store Picker" : "Change Store"}
+              </button>
             </div>
 
-            <button className="drawer-change-store-btn"
-            onClick={() => setShowStorePicker(!showStorePicker)}
-            >
-              {showStorePicker ? "Close" : "Change Store"}
-            </button>
-            </div>
-
-
-            {/* Store Locator */}
+            {/* Store Picker */}
             {showStorePicker && (
-              <div className="cart-store-locator">
+              <div className="drawer-store-picker">
                 <StoreLocator
                   compact={true}
                   onSelectStore={(store) => {
                     setSelectedStore(store);
-                    setShowStorePicker(false); // hide on selection
+                    setShowStorePicker(false);
                   }}
                 />
               </div>
@@ -99,9 +102,11 @@ export default function CartDrawer({ isOpen, onClose }) {
                       alt={item.name}
                       className="cart-item-img"
                     />
+
                     <div className="cart-item-details">
                       <h3>{item.name}</h3>
                       <p>${item.price?.toFixed(2)}</p>
+
                       <div className="cart-qty-controls">
                         <button
                           onClick={() => updateQty(item.id, item.qty - 1)}
@@ -110,16 +115,16 @@ export default function CartDrawer({ isOpen, onClose }) {
                           -
                         </button>
                         <span>{item.qty}</span>
-                        <button
-                          onClick={() => updateQty(item.id, item.qty + 1)}
-                        >
+                        <button onClick={() => updateQty(item.id, item.qty + 1)}>
                           +
                         </button>
                       </div>
+
                       <p className="cart-item-subtotal">
                         Subtotal: ${(item.price * item.qty).toFixed(2)}
                       </p>
                     </div>
+
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="remove-btn"
@@ -137,12 +142,15 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <span>Total:</span>
                 <span>${total.toFixed(2)}</span>
               </div>
-              <Link to="/cart" onClick={onClose} className="view-cart-btn">
+
+              <Link to="/cart" className="view-cart-btn" onClick={onClose}>
                 View Cart
               </Link>
 
-              {/* Check out order */}
-              <button onClick={() => navigate("/payment")} className="checkout-btn">
+              <button
+                className="checkout-btn"
+                onClick={() => navigate("/payment")}
+              >
                 Checkout
               </button>
             </div>

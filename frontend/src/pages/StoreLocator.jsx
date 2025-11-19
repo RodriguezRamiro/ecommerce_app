@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { Loader } from "@googlemaps/js-api-loader";
+import { useCart } from "../context/CartContext";
 import "./styles/StoreLocator.css";
 
 
@@ -11,7 +11,7 @@ const dummyStores = [
     { id: 2, name: "E-shop Uptown", city: "New York", zip: "10027", lat: 40.8176, lng: -73.9532 },
     { id: 3, name: "E-shop Central", city: "Chicago", zip: "60601", lat: 41.8837, lng: -87.6234 },
     { id: 4, name: "E-shop Coast", city: "Los Angeles", zip: "90001", lat: 34.0522, lng: -118.2437 },
-    { id: 4, name: "E-shop East", city: "Miami", zip: "33114", lat: 25.7617, lng: -80.1918 },
+    { id: 5, name: "E-shop East", city: "Miami", zip: "33114", lat: 25.7617, lng: -80.1918 },
 ];
 
 export default function StoreLocator({ compact = false, onSelectStore }) {
@@ -19,7 +19,7 @@ export default function StoreLocator({ compact = false, onSelectStore }) {
     const [results, setResults] = useState([]);
 
     // Global store context
-    const { selectedStore, setSelectedStore } = useStore();
+    const { selectedStore, setSelectedStore, defaultStore } = useCart();
 
 
 // Auto Search on input
@@ -66,7 +66,7 @@ return (
         <button type="submit">Search</button>
       </form>
 
-      {/* Dropdown UI */}
+      {/* Dropdown Results */}
       {query.trim() !== "" && (
         <div className="store-dropdown">
           {results.length === 0 ? (
@@ -74,7 +74,7 @@ return (
           ) : (
             <ul>
               {results.map((store) => (
-                <li key={store.id} onClick={() => onSelectStore && onSelectStore(store)}>
+                <li key={store.id} onClick={() => handleSelect(store)}>
                   <strong>{store.name}</strong> — {store.city} ({store.zip})
                 </li>
               ))}

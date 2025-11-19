@@ -6,8 +6,9 @@ import { useCart } from "../context/CartContext";
 import { createOrder } from "../utils/api";
 import "./styles/Checkout.css";
 
+
 export default function Checkout() {
-  const { cart, clearCart, setLastOrder } = useCart();
+  const { cart, clearCart, setLastOrder, selectedStore } = useCart();
   const navigate = useNavigate();
 
   // Subtotal (derived)
@@ -77,7 +78,8 @@ export default function Checkout() {
       tax: Number(tax.toFixed(2)),
       total: Number(grandTotal.toFixed(2)),
       created_at: new Date().toISOString(),
-      orderNumber: generateOrderNumber()
+      orderNumber: generateOrderNumber(),
+      store: selectedStore
     };
 
     try {
@@ -118,6 +120,12 @@ export default function Checkout() {
       {/* 🛒 Cart Summary */}
       <div className="cart-summary">
         <h3>Order Summary</h3>
+
+        {selectedStore && (
+          <div className="checkout-store-banner">
+            <strong>Store:</strong> {selectedStore.name} - {selectedStore.city} ({selectedStore.zip})
+          </div>
+        )}
         {cart.length === 0 ? (
            <p>Your cart is empty.</p>
            ) : (

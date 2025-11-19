@@ -27,12 +27,19 @@ export function CartProvider({ children }) {
 
  const [selectedStore, setSelectedStore] = useState(() => {
   const saved = localStorage.getItem("selectedStore");
-  return saved ? JSON.parse(saved) : null;
+  return saved ? JSON.parse(saved) : defaultStore;
  });
+
+ useEffect(() => {
+   if (!selectedStore) {
+     setSelectedStore(defaultStore);
+   }
+ }, []);
 
  useEffect(() => {
   localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
 }, [selectedStore]);
+
 
 
   const [lastOrder, setLastOrder] = useState(null);
@@ -40,8 +47,8 @@ export function CartProvider({ children }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
+  }, [selectedStore]);
 
   // Add product
   const addToCart = (product, qty = 1) => {

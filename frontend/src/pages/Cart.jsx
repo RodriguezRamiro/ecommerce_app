@@ -1,14 +1,18 @@
 // frontend/src/pages/Cart.jsx
 
 
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useStore } from "../context/StoreContext";
 import StoreLocator from "./StoreLocator";
 import "./styles/Cart.css";
 
+
+
 export default function Cart() {
   const { cart, removeFromCart, updateQty, clearCart, total, placeOrder } = useCart();
+  const { selectedStore } = useStore();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -81,6 +85,20 @@ export default function Cart() {
 
 
           {/* Order Summary */}
+          {/* Selected Store */}
+          <div className="selected-store-box">
+            {selectedStore ? (
+              <>
+                <h4>Pickup Store</h4>
+                <p><strong>{selectedStore.name}</strong></p>
+                <p>{selectedStore.address}</p>
+                <p>{selectedStore.city}, {selectedStore.state} {selectedStore.zip}</p>
+              </>
+            ) : (
+              <p>No store selected yet.</p>
+            )}
+          </div>
+
           <div className="order-summary">
             <h3>Order Summary</h3>
             <div className="summary-row">
