@@ -12,7 +12,7 @@ import "./styles/Cart.css";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQty, clearCart, total, placeOrder } = useCart();
-  const { selectedStore } = useStore();
+  const { selectedStore } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {

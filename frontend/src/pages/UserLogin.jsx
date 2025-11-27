@@ -3,6 +3,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import "./styles/UserAuth.css";
 
 const UserLogin = () => {
     const { login, isDemoMode} = useContext(UserContext);
@@ -15,12 +16,13 @@ const UserLogin = () => {
     e.preventDefault();
     const result = await login(email, password);
     setMessage(result.message);
-    if (result.success) setTimeout(() => navigate("/"), 1000);
+    if (result.success) setTimeout(() => navigate("/dashboard"), 800);
   };
 
     return (
         <div className="auth-page">
             <h2>Login {isDemoMode && "(Demo Mode)"}</h2>
+            <p className="demo-note"> <strong>Demo only</strong> - Will need active backend for live login</p>
             <form onSubmit={handleLogin}>
                 <input
                 type="email"

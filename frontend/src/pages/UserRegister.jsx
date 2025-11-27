@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react'
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import "./styles/UserAuth.css";
 
 export default function UserRegister() {
   const { register, isDemoMode } = useContext(UserContext);
@@ -15,12 +16,13 @@ export default function UserRegister() {
     e.preventDefault();
     const result = await register(email, password);
     setMessage(result.message);
-    if ( result.sucess) setTimeout(() => navigate("/"), 1000);
+    if ( result.success) setTimeout(() => navigate("/dashboard"), 1000);
 }
 
 return (
   <div className="auth-page">
     <h2> Register {isDemoMode && "(Demo Mode)"} </h2>
+    <p className="demo-note"> <strong>Demo only</strong> - Will need active backend for live registration</p>
     <form onSubmit={handleRegister}>
       <input
       type="email"

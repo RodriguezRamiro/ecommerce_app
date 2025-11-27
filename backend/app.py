@@ -17,6 +17,7 @@ swagger = Swagger(app)
 
 # Import Blueprints
 from backend.routes.admin_routes import admin_bp
+from backend.routes.stores import stores_bp
 from backend.routes.products import products_bp
 from backend.routes.contact import contact_bp
 from backend.routes.orders import orders_bp
@@ -24,6 +25,7 @@ from backend.routes.health import health_bp
 from backend.routes.user_routes import user_bp
 
 # Register Blueprints
+app.register_blueprint(stores_bp, url_prefix="/api/stores")
 app.register_blueprint(products_bp, url_prefix="/api/products")
 app.register_blueprint(contact_bp, url_prefix="/api/contact")
 app.register_blueprint(orders_bp, url_prefix="/api/orders")

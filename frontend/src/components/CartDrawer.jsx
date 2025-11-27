@@ -10,7 +10,7 @@ import "./styles/CartDrawer.css";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cart, removeFromCart, updateQty, total, placeOrder } = useCart();
-  const { selectedStore, setSelectedStore } = useStore();
+  const { selectedStore, setSelectedStore } = useCart();
   const [showStorePicker, setShowStorePicker] = useState(false);
   const navigate = useNavigate();
 

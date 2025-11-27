@@ -19,7 +19,7 @@ export default function Footer({ serverStatus }) {
             {serverStatus === "checking"
               ? "Checking server status..."
               : serverStatus === "online"
-              ? "Backend: Online (Demo Mode Active)"
+              ? "Backend: Online (Live Mode Active)"
               : "Backend: Offline (Demo Mode Active)"}
           </p>
           {user && <p className="user-status">Logged in as {user.email}</p>}

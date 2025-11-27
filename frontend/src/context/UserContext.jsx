@@ -2,12 +2,15 @@
 
 
 /**
- * Stores the current user.
- * Handles login, register, and logout actions.
- * Supports mock/demo mode (VITE_USE_MOCK=true).
- * Persists sessions in localStorage. + Flask sessiion cookie.
- * Include admin-role placeholder for future backend expansion
- */
+ * UserContext
+ * - Provides user/session state for the app
+ * - Supports demo mode (VITE_USE_MOCK=true) with persistent user + orderHistory in localStorage
+ * - Supports live backend mode (Flask endpoints) using session cookies (credentials: "include")
+ * - Exposes functions: login, register, logout, updateEmail, updatePassword, setPreferredStore,
+ *   fetchUserOrders, saveOrderToHistory
+ *
+ * Option B: preferredStore is NOT persisted to localStorage in demo mode.
+ */ //////////////////<<---------////??????????//
 
 
 import { createContext, useState, useEffect } from 'react';
@@ -15,63 +18,100 @@ import { createContext, useState, useEffect } from 'react';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        const saved = localStorage.getItem("user");
+        return saved ? JSON.parse(saved) : null
+    });
+    const [orderHistory, setOrderHistory] = useState(() => {
+        const saved = localStorage.getItem("orderHistory");
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    //Runtime-Only preferredStore (Not persisted to localStoragein demo mode)
+    const [preferredStore, setPreferredStoreState] = useState(() => {
+        //if a user object exists with preferredStore from previous live sessions, keep it
+        try {
+            const saved = localStorage.getItem("user");
+            if (saved) {
+                const u = JSON.parse(saved);
+                return u?.preferredStore || null;
+            }
+        } catch (e) {
+            // ignore
+        }
+        return null;
+    })
 
     // Normalize environment variables
-  const isDemoMode = String(import.meta.env.VITE_USE_MOCK).toLowerCase() === "true";
+  const isDemoMode =
+  String(import.meta.env.VITE_USE_MOCK).toLowerCase() === "true";
   const API_URL =
     import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:5000/api";
 
 
-    // Load saved session (if any)
-    useEffect(() => {
-        const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-          try {
-            setUser(JSON.parse(savedUser));
-          } catch (err) {
-            console.warn("Corrupted user data in localStorage, clearing...");
-            localStorage.removeItem("user");
-          }
-        }
-      }, []);
-
-    // Save session when user changes
+    // Persists user + orderHistory
     useEffect(() => {
         if (user) localStorage.setItem("user", JSON.stringify(user));
         else localStorage.removeItem("user");
-    }, [user]);
+    }, [user])
 
-    //check bacend session on mount ( for persistance)
-    useEffect(() => {
+      useEffect(() => {
+        localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+      }, [orderHistory]);
+
+      // Helper - update in-memory user preferredStore no persistance in demo
+      const setPreferredStoreLocal = (store) => {
+        setPreferredStoreState(store || null);
+        setUser((prev) => {
+            if(!prev) return prev;
+            return { ...prev, preferredStore: store || null };
+        });
+      };
+
+      // On mount, if not demo mode, try to load sessions from backend
+      useEffect(() => {
+        if (isDemoMode) return;
+
         const checkSession = async () => {
             try {
                 const res = await fetch(`${API_URL}/users/current`, {
-                    method: "GET",
-                    credentials: "include",
+                method: "GET",
+                credentials: "include",
                 });
+
                 const data = await res.json();
+
                 if (data.user) {
-                    setUser(data.user);1
-            } else {
+                    setUser(data.user);
+
+                //Keep preferredStore in runtime state too
+                if (data.user.preferredStore) {
+                    setPreferredStoreState(data.user.preferredStore);
+                }
+                //fetch orders for this user
+                await fetchUserOrders();
+                } else {
                 setUser(null);
-                localStorage.removeItem("user");
+                }
+            } catch (err) {
+                console.error("session check failed:", err);
             }
-        } catch (err) {
-            console.error("session check failed:", err);
-        }
-    };
-    if (!isDemoMode) {
+            };
         checkSession();
-    }
     }, []);
 
     // Auth actions
     const login = async (email, password) => {
         if (isDemoMode) {
             // simulated login for demo mode
-            const demoUser = { email, role: email === "admin@example.com" ? "admin" : "user"};
+            const demoUser = {
+                email,
+                role: email === "admin@example.com" ? "admin" : "user",
+                lastLogin: new Date().toISOString(),
+                preferredStore: null,
+            };
             setUser(demoUser);
+            setPreferredStoreState(null);
             return { success: true, message: "Logged in (Demo Mode)" };
             }
                 try {
@@ -84,10 +124,10 @@ export const UserProvider = ({ children }) => {
 
                     const data = await res.json();
                     if (res.ok && data.user) {
-                        // If backkend doesnt send role yet, assume ' user' for now
-                        const loggedInUser = { ...data.user, role: data.user.role || "user" };
-                        setUser(loggedInUser);
-                        return { sucess: true, message: "Logged in sucessfully" };
+                        if (data.user.preferredStore) setPreferredStoreState(data.user.preferredStore);
+                        //load user's orders
+                        await fetchUserOrders();
+                        return { success: true, message: "Logged in sucessfully", data: data.user };
                     } else {
                         return { success: false, message: data.message || "Login failed" };
                     }
@@ -100,10 +140,17 @@ export const UserProvider = ({ children }) => {
         const register = async (email, password) => {
             if (isDemoMode) {
                 // Simulated Registration
-                const demoUser = { email, role: email === "admin@example.com" ? "admin" : "user" };
+                const demoUser = {
+                    email,
+                    role: email === "admin@example.com" ? "admin" : "user",
+                    lastLogin: new Date().toISOString(),
+                    preferredStore: null,
+                 };
                 setUser(demoUser);
-                return { sucess: true, message: "Registered (Demo Mode)" };
+                setPreferredStoreState(null);
+                return { sucess: true, message: "Registered (Demo Mode)", data: demoUser };
             }
+
             try {
                 const res = await fetch(`${API_URL}/users/register`, {
                     method: "POST",
@@ -111,12 +158,18 @@ export const UserProvider = ({ children }) => {
                     body: JSON.stringify({ email, password }),
                     credentials: "include",
                     });
+
                     const data = await res.json();
                     if (res.ok) {
-                        // Mimic user for backend not vailable
-                        const newUser = { email, role: email === "admin@example.com" ? "admin" : "user" };
+                        // Mimic user for backend not available
+                        const newUser = data.user || {
+                            email,
+                            role: email === "admin@example.com" ? "admin" : "user",
+                            preferredStore: null,
+                         };
                         setUser(newUser);
-                        return { success: true, message: "Registered successfully" };
+                        setPreferredStoreState(newUser.preferredStore || null);
+                        return { success: true, message: "Registered successfully", data: newUser };
                     } else {
                         return { success: false, message: data.error || "Registration failed" };
                     }
@@ -139,17 +192,160 @@ export const UserProvider = ({ children }) => {
           }
 
           setUser(null);
-          localStorage.removeItem("user");
+          setPreferredStoreState(null);
         };
 
-        // Debug Logging
-        useEffect(() => {
-            console.log(
-                `%c[UserContext]%c Mode: ${isDemoMode ? "Demo" : "Live"} | API: ${API_URL}`,
-                "color:#7DDA58;font-weight:bold;",
-                "color:#ccc;"
-              );
-            }, []);
+        // Account update functions
+
+        const updateEmail = async (newEmail) => {
+            if (!newEmail) return { success: false, message: "Email required"};
+
+            if (isDemoMode) {
+                setUser((prev) => (prev ? { ...prev, email: newEmail } : prev));
+        };
+
+        try {
+            const res = await fetch(`${API_URL}/users/update-email`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ email: newEmail }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                //backend returns updated user profile
+                setUser(data.user || null);
+                return { success: true, message: "Email updated", date: data.user };
+            }
+            return { success: false, message: data.error || "Failed to update email" };
+        } catch (err) {
+            console.error("Update email error:", err);
+            return { success: false, message: "Network error" };
+        }
+    };
+
+        const updatePassword = async (oldPassword, newPassword) => {
+            if (isDemoMode) {
+            return { success: true, message: "Password updated (Demo Mode)" };
+        }
+
+        try {
+            const res = await fetch(`$API_URL}/users/update-password`, {
+                method: "PUT",
+                headers: { "Cpntent-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ oldPassword, newPassword }),
+            });
+            const data = await res.json();
+            if (res.ok) return { success: true, message: "Password updated" };
+            return { success: false, message: data.error || "Failed to update password" };
+        } catch (err) {
+            return { success: false, message: "Network error" };
+        }
+    };
+
+    // Preferred store
+
+    /**
+     * setPreferredStore(store)
+     *  - in livemode: PUT /users/set-preferred-store { store }
+     *  - in demo mode: only set in memory ( preferredStore state), do NOT persist to localStorage
+     *
+     * expected store shape:
+     *  { id, name, city, zip, meta? }
+     */
+
+    const setPreferredStore = async (store) => {
+        if (!store || typeof store !== "object") {
+            return { success: false, message: "Invalid store object"};
+        }
+
+        if (isDemoMode) {
+            setPreferredStoreLocal(store);
+            return { success: true, message: "Preferred store set (demo)"};
+        };
+
+        try {
+            const res = await fetch(`${API_URL}/users/set-preferred-store`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ store }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                // backend returns preferredStore
+                const p = data.preferredStore || store;
+                setPreferredStoreLocal(p);
+                //update user object with new preferredStore
+                setUser((prev) => (prev ? {...prev, preferredStore: p } : prev));
+                return { success: true, message: "Preferred store set", data: p };
+            } else {
+                return { success: false, message: data.error || "Failed to set preferred store" };
+            }
+        } catch (err) {
+            console.error("Set preferred store error:", err);
+            return { success: false, message: "Network error" };
+        }
+    };
+
+    // Orders (history)
+
+    // Fetch users orders from backend (live Mode). in demo returns local orderHistory.
+    const fetchUsersOrders = async () => {
+        if (isDemoMode) {
+            return { success: true, data: orderHistory };
+        }
+
+        try {
+            const res = await fetch(`${API_URL}/users/orders`, {
+                method: "GET",
+                credentials: "include",
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                // backend returns { orders: [...] }
+                const orders = data.orders || [];
+                setOrderHistory(orders);
+                return { success: true, data: orders };
+            }
+            return { success: false, message: data.error || "Failed to fetch orders" };
+        } catch (err) {
+            console.error("Fetch orders error:", err);
+            return { success: false, message: "Network error" };
+        }
+    };
+
+    // Save order: pushes to backend (live) or to local orderHistory (demo)
+    // Alse returns the saved oder.
+    const saveOrderToHistory = async (order) => {
+        if (!order) return { success: false, message: "Order required" };
+
+        if (isDemoMode) {
+            setOrderHistory((prev) => [...prev, order]);
+            return { success: true, data: order };
+        }
+
+        try {
+            const res = await fetch(`${API_URL}/users/orders`, {
+                method: "POST",
+                headers: { "Content_type": "application/json"},
+                credentials: "include",
+                body: JSON.stringify(order),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                // Add saved order to client-side history
+                setOrderHistory((prev) => [...prev, data.order]);
+                return { success: true, data: data.order };
+            }
+                return { success: false, message: data.error || "Failed to save order" };
+        } catch (err) {
+            console.error("save order error:", err);
+            return { success: false, message: "Network error" };
+        }
+    };
 
         return (
           <UserContext.Provider
@@ -158,6 +354,13 @@ export const UserProvider = ({ children }) => {
             login,
             register,
             logout,
+            updateEmail,
+            updatePassword,
+            preferredStore,
+            setPreferredStore,
+            orderHistory,
+            fetchUsersOrders,
+            saveOrderToHistory,
             isDemoMode,
             isAdmin: user?.role === "admin",
             isLoggedIn: !!user,

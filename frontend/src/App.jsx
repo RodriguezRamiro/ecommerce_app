@@ -27,6 +27,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedAdminRoute from "./components/auth/ProtectedAdminRoute";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
+import UserDashboard from "./pages/dashboard/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 
@@ -87,7 +88,12 @@ function App() {
               </ProtectedAdminRoute>
                 }
              />
-
+             <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              }
+            />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
