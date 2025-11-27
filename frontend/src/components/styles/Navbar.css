@@ -92,8 +92,11 @@
 }
 
 .app-container.dark-mode .dark-toggle {
-    background: #444;
-    color: white;
+  font-size: 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-primary);
 }
 
   .cart-btn {
@@ -169,6 +172,55 @@
     font-weight: bold;
     color: var(--primary-color, #2a72ff);
   }
+
+  /* ===== Dark Mode Toggle Switch Upgrade ===== */
+
+.dark-toggle {
+  width: 30px;
+  height: 20px;
+  border-radius: 30px;
+  border: none;
+  padding: 0px;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.dark-toggle .toggle-thumb {
+  width: 10px;
+  height: 15px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+.dark-toggle.active {
+  background: #111827;
+}
+
+.dark-toggle.active .toggle-thumb {
+  transform: translateX(20px);
+  background: #1f2937;
+  color: white;
+}
+
+/* Make sure it still looks good in both modes */
+.app-container.light-mode .dark-toggle {
+  background: #e5e5e5;
+}
+
+.app-container.dark-mode .dark-toggle {
+  background: #111827;
+}
+
 
   /* Responsive */
   @media (max-width: 768px) {

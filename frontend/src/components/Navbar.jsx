@@ -92,10 +92,14 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
           )}
 
           {/* Dark Mode Toggle */}
-          <button className="dark-toggle"
+            <button
+            className={`dark-toggle ${darkMode ? "active" : ""}`}
             onClick={() => setDarkMode(!darkMode)}
+            aria-label="Toggle dark mode"
           >
-            {darkMode ? "Light Mode" : "Dark Mode"}
+            <span className="toggle-thumb">
+              {darkMode ? "🌑" : "🌕"}
+            </span>
           </button>
 
           {/* Mobile Menu Toggle */}
