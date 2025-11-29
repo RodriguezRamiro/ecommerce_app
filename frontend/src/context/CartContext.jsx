@@ -12,6 +12,8 @@ export function useCart() {
 
 // Provider Component
 export function CartProvider({ children }) {
+  const [drawerHasOpenedOnce, setDrawerHasOpenedOnce] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem("cart");
     return saved ? JSON.parse(saved) : [];
@@ -62,6 +64,11 @@ export function CartProvider({ children }) {
       }
       return [...prevCart, { ...product, qty }];
     });
+
+    if (!drawerHasOpenedOnce) {
+      setIsDrawerOpen(true);
+      setDrawerHasOpenedOnce(true);
+    }
   };
 
   // Remove product
@@ -147,6 +154,9 @@ export function CartProvider({ children }) {
         selectedStore,
         setSelectedStore,
         defaultStore,
+        //Drawer Controls
+        isDrawerOpen,
+        setIsDrawerOpen,
       }}
     >
       {children}

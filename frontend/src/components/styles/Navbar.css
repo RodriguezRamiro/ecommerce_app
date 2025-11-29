@@ -59,13 +59,13 @@
     gap: 12px;
   }
 
-.app-container.ligth-mode .navbar {
+.app-container.light-mode .navbar {
     background: #ffffff;
     color: #222;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.app-container.light-mode .nav-link {
+.app-container.light-mode.nav-link {
     color: #444;
 }
 
@@ -143,6 +143,7 @@
     gap: 12px;
     padding: 12px 16px;
     background: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.45);
   }
 
   .mobile-menu a {
@@ -161,7 +162,6 @@
     text-align: right;
     font-size: 0.8rem;
   }
-
 
   .nav-store-indicator .store-label {
     opacity: 0.7;
@@ -212,7 +212,6 @@
   color: white;
 }
 
-/* Make sure it still looks good in both modes */
 .app-container.light-mode .dark-toggle {
   background: #e5e5e5;
 }
@@ -220,6 +219,67 @@
 .app-container.dark-mode .dark-toggle {
   background: #111827;
 }
+
+
+/* User Controls */
+
+.user-menu {
+  position: relative;
+}
+
+.user-name {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary, #fff);
+  font-weight: 500;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background: var(--card-bg, #2a2a2a);
+  border: 1px solid var(--border-color, #444);
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 140px;
+  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.3));
+  z-index: 20;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  color: var(--accent);
+}
+
+.login-link {
+  color: #ccc;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.login-link:hover {
+  color: #4f9cff;
+}
+
+
+
+
 
 
   /* Responsive */

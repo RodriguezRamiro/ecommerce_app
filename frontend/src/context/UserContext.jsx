@@ -7,253 +7,260 @@
  * - Supports demo mode (VITE_USE_MOCK=true) with persistent user + orderHistory in localStorage
  * - Supports live backend mode (Flask endpoints) using session cookies (credentials: "include")
  * - Exposes functions: login, register, logout, updateEmail, updatePassword, setPreferredStore,
- *   fetchUserOrders, saveOrderToHistory
+ *   fetchUsersOrders, saveOrderToHistory
  *
  * Option B: preferredStore is NOT persisted to localStorage in demo mode.
- */ //////////////////<<---------////??????????//
+ */
 
 
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const saved = localStorage.getItem("user");
-        return saved ? JSON.parse(saved) : null
-    });
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
     const [orderHistory, setOrderHistory] = useState(() => {
-        const saved = localStorage.getItem("orderHistory");
-        return saved ? JSON.parse(saved) : [];
-    });
+    const saved = localStorage.getItem("orderHistory");
+    return saved ? JSON.parse(saved) : [];
+  });
 
     //Runtime-Only preferredStore (Not persisted to localStoragein demo mode)
     const [preferredStore, setPreferredStoreState] = useState(() => {
-        //if a user object exists with preferredStore from previous live sessions, keep it
-        try {
-            const saved = localStorage.getItem("user");
-            if (saved) {
-                const u = JSON.parse(saved);
-                return u?.preferredStore || null;
-            }
-        } catch (e) {
-            // ignore
-        }
-        return null;
-    })
+    try {
+      const saved = localStorage.getItem("user");
+      if (saved) {
+        const u = JSON.parse(saved);
+        return u?.preferredStore || null;
+      }
+    } catch {}
+    return null;
+  });
 
     // Normalize environment variables
   const isDemoMode =
-  String(import.meta.env.VITE_USE_MOCK).toLowerCase() === "true";
+    String(import.meta.env.VITE_USE_MOCK).toLowerCase() === "true";
   const API_URL =
-    import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:5000/api";
-
+    import.meta.env.VITE_API_URL?.replace(/\/$/, "") ||
+    "http://127.0.0.1:5000/api";
 
     // Persists user + orderHistory
-    useEffect(() => {
-        if (user) localStorage.setItem("user", JSON.stringify(user));
-        else localStorage.removeItem("user");
-    }, [user])
+     useEffect(() => {
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+  }, [user]);
 
       useEffect(() => {
         localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
-      }, [orderHistory]);
+        }, [orderHistory]);
 
       // Helper - update in-memory user preferredStore no persistance in demo
       const setPreferredStoreLocal = (store) => {
         setPreferredStoreState(store || null);
-        setUser((prev) => {
-            if(!prev) return prev;
-            return { ...prev, preferredStore: store || null };
-        });
-      };
+        setUser((prev) => (prev ? { ...prev, preferredStore: store || null } : prev));
+     };
 
       // On mount, if not demo mode, try to load sessions from backend
       useEffect(() => {
-        if (isDemoMode) return;
+    if (isDemoMode) return;
 
-        const checkSession = async () => {
-            try {
-                const res = await fetch(`${API_URL}/users/current`, {
-                method: "GET",
-                credentials: "include",
-                });
+    const checkSession = async () => {
+      try {
+        const res = await fetch(`${API_URL}/users/current`, {
+          method: "GET",
+          credentials: "include",
+        });
+
 
                 const data = await res.json();
 
-                if (data.user) {
-                    setUser(data.user);
+        if (data.user) {
+          setUser(data.user);
+          if (data.user.preferredStore)
+            setPreferredStoreState(data.user.preferredStore);
 
-                //Keep preferredStore in runtime state too
-                if (data.user.preferredStore) {
-                    setPreferredStoreState(data.user.preferredStore);
-                }
-                //fetch orders for this user
-                await fetchUserOrders();
-                } else {
-                setUser(null);
-                }
-            } catch (err) {
-                console.error("session check failed:", err);
-            }
-            };
+          await fetchUsersOrders();
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Session check failed:", err);
+      }
+    };
         checkSession();
     }, []);
 
     // Auth actions
     const login = async (email, password) => {
-        if (isDemoMode) {
-            // simulated login for demo mode
-            const demoUser = {
-                email,
-                role: email === "admin@example.com" ? "admin" : "user",
-                lastLogin: new Date().toISOString(),
-                preferredStore: null,
-            };
-            setUser(demoUser);
-            setPreferredStoreState(null);
-            return { success: true, message: "Logged in (Demo Mode)" };
-            }
-                try {
-                    const res = await fetch(`${API_URL}/users/login`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email, password }),
-                        credentials: "include",
-                    });
+    if (isDemoMode) {
+      const demoUser = {
+        email,
+        role: email === "admin@example.com" ? "admin" : "user",
+        lastLogin: new Date().toISOString(),
+        preferredStore: null,
+      };
 
-                    const data = await res.json();
-                    if (res.ok && data.user) {
-                        if (data.user.preferredStore) setPreferredStoreState(data.user.preferredStore);
-                        //load user's orders
-                        await fetchUserOrders();
-                        return { success: true, message: "Logged in sucessfully", data: data.user };
-                    } else {
-                        return { success: false, message: data.message || "Login failed" };
-                    }
-                } catch (err) {
-                    console.error("Login error:", err);
-                    return { success: false, message: "Network error" };
-                }
-            };
+      setUser(demoUser);
+      setPreferredStoreState(null);
+
+      return { success: true, message: "Logged in (Demo Mode)" };
+    }
+                 try {
+      const res = await fetch(`${API_URL}/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.user) {
+        setUser(data.user);
+        if (data.user.preferredStore)
+          setPreferredStoreState(data.user.preferredStore);
+
+        await fetchUsersOrders();
+
+        return {
+          success: true,
+          message: "Logged in successfully",
+          data: data.user,
+        };
+      }
+
+      return { success: false, message: data.message || "Login failed" };
+    } catch (err) {
+      console.error("Login error:", err);
+      return { success: false, message: "Network error" };
+    }
+  };
+
 
         const register = async (email, password) => {
-            if (isDemoMode) {
-                // Simulated Registration
-                const demoUser = {
-                    email,
-                    role: email === "admin@example.com" ? "admin" : "user",
-                    lastLogin: new Date().toISOString(),
-                    preferredStore: null,
-                 };
-                setUser(demoUser);
-                setPreferredStoreState(null);
-                return { sucess: true, message: "Registered (Demo Mode)", data: demoUser };
-            }
+    if (isDemoMode) {
+      const demoUser = {
+        email,
+        role: email === "admin@example.com" ? "admin" : "user",
+        lastLogin: new Date().toISOString(),
+        preferredStore: null,
+      };
+      setUser(demoUser);
+      setPreferredStoreState(null);
 
-            try {
-                const res = await fetch(`${API_URL}/users/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password }),
-                    credentials: "include",
-                    });
+      return {
+        success: true,
+        message: "Registered (Demo Mode)",
+        data: demoUser,
+      };
+    }
+    try {
+      const res = await fetch(`${API_URL}/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
 
-                    const data = await res.json();
-                    if (res.ok) {
-                        // Mimic user for backend not available
-                        const newUser = data.user || {
-                            email,
-                            role: email === "admin@example.com" ? "admin" : "user",
-                            preferredStore: null,
-                         };
-                        setUser(newUser);
-                        setPreferredStoreState(newUser.preferredStore || null);
-                        return { success: true, message: "Registered successfully", data: newUser };
-                    } else {
-                        return { success: false, message: data.error || "Registration failed" };
-                    }
-                } catch (err) {
-                    console.error("Register error:", err);
-                    return { success: false, message: "Network error"};
-            }
-        };
+      const data = await res.json();
 
-        const logout = async () => {
-          if (!isDemoMode) {
-            try {
-                await fetch(`${API_URL}/users/logout`, {
-                    method:"POST",
-                    credentials: "include",
-                });
-            } catch (err) {
-              console.error("Logout error:", err);
-            }
-          }
+      if (res.ok) {
+        const newUser =
+          data.user || {
+            email,
+            role: email === "admin@example.com" ? "admin" : "user",
+            preferredStore: null,
+          };
+          setUser(newUser);
+        setPreferredStoreState(newUser.preferredStore || null);
 
-          setUser(null);
-          setPreferredStoreState(null);
-        };
+        return { success: true, message: "Registered successfully", data: newUser };
+      }
+
+      return { success: false, message: data.error || "Registration failed" };
+    } catch (err) {
+      console.error("Register error:", err);
+      return { success: false, message: "Network error" };
+    }
+  };
+  const logout = async () => {
+    if (!isDemoMode) {
+      try {
+        await fetch(`${API_URL}/users/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    }
+
+    setUser(null);
+    setPreferredStoreState(null);
+  };
+
 
         // Account update functions
 
         const updateEmail = async (newEmail) => {
-            if (!newEmail) return { success: false, message: "Email required"};
+    if (!newEmail)
+      return { success: false, message: "Email required" };
 
-            if (isDemoMode) {
-                setUser((prev) => (prev ? { ...prev, email: newEmail } : prev));
-        };
+    if (isDemoMode) {
+      setUser((prev) => (prev ? { ...prev, email: newEmail } : prev));
+      return { success: true, message: "Email updated (Demo Mode)" };
+    }
 
-        try {
-            const res = await fetch(`${API_URL}/users/update-email`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ email: newEmail }),
-            });
-            const data = await res.json();
-            if (res.ok) {
-                //backend returns updated user profile
-                setUser(data.user || null);
-                return { success: true, message: "Email updated", date: data.user };
-            }
-            return { success: false, message: data.error || "Failed to update email" };
-        } catch (err) {
-            console.error("Update email error:", err);
-            return { success: false, message: "Network error" };
-        }
-    };
+    try {
+      const res = await fetch(`${API_URL}/users/update-email`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: newEmail }),
+      });
 
-        const updatePassword = async (oldPassword, newPassword) => {
-            if (isDemoMode) {
-            return { success: true, message: "Password updated (Demo Mode)" };
-        }
+      const data = await res.json();
 
-        try {
-            const res = await fetch(`$API_URL}/users/update-password`, {
-                method: "PUT",
-                headers: { "Cpntent-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ oldPassword, newPassword }),
-            });
-            const data = await res.json();
-            if (res.ok) return { success: true, message: "Password updated" };
-            return { success: false, message: data.error || "Failed to update password" };
-        } catch (err) {
-            return { success: false, message: "Network error" };
-        }
-    };
+      if (res.ok) {
+        setUser(data.user || null);
+        return { success: true, message: "Email updated", data: data.user };
+      }
+      return { success: false, message: data.error || "Failed to update email" };
+    } catch (err) {
+      console.error("Update email error:", err);
+      return { success: false, message: "Network error" };
+    }
+  };
+
+  const updatePassword = async (oldPassword, newPassword) => {
+    if (isDemoMode)
+      return { success: true, message: "Password updated (Demo Mode)" };
+
+    try {
+      const res = await fetch(`${API_URL}/users/update-password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) return { success: true, message: "Password updated" };
+
+      return {
+        success: false,
+        message: data.error || "Failed to update password",
+      };
+    } catch (err) {
+      console.error("Update password error:", err);
+      return { success: false, message: "Network error" };
+    }
+  };
 
     // Preferred store
-
-    /**
-     * setPreferredStore(store)
-     *  - in livemode: PUT /users/set-preferred-store { store }
-     *  - in demo mode: only set in memory ( preferredStore state), do NOT persist to localStorage
-     *
-     * expected store shape:
-     *  { id, name, city, zip, meta? }
-     */
 
     const setPreferredStore = async (store) => {
         if (!store || typeof store !== "object") {
@@ -262,7 +269,7 @@ export const UserProvider = ({ children }) => {
 
         if (isDemoMode) {
             setPreferredStoreLocal(store);
-            return { success: true, message: "Preferred store set (demo)"};
+            return { success: true, message: "Preferred store set (Demo Mode)"};
         };
 
         try {
@@ -273,16 +280,18 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify({ store }),
             });
             const data = await res.json();
+
             if (res.ok) {
                 // backend returns preferredStore
                 const p = data.preferredStore || store;
                 setPreferredStoreLocal(p);
-                //update user object with new preferredStore
-                setUser((prev) => (prev ? {...prev, preferredStore: p } : prev));
                 return { success: true, message: "Preferred store set", data: p };
-            } else {
-                return { success: false, message: data.error || "Failed to set preferred store" };
             }
+
+            return {
+                success: false,
+                message: data.error || "Failed to set preferred store"
+            };
         } catch (err) {
             console.error("Set preferred store error:", err);
             return { success: false, message: "Network error" };
@@ -310,6 +319,7 @@ export const UserProvider = ({ children }) => {
                 setOrderHistory(orders);
                 return { success: true, data: orders };
             }
+
             return { success: false, message: data.error || "Failed to fetch orders" };
         } catch (err) {
             console.error("Fetch orders error:", err);
@@ -330,17 +340,20 @@ export const UserProvider = ({ children }) => {
         try {
             const res = await fetch(`${API_URL}/users/orders`, {
                 method: "POST",
-                headers: { "Content_type": "application/json"},
+                headers: { "Content-type": "application/json"},
                 credentials: "include",
                 body: JSON.stringify(order),
             });
+
             const data = await res.json();
+
             if (res.ok) {
                 // Add saved order to client-side history
                 setOrderHistory((prev) => [...prev, data.order]);
                 return { success: true, data: data.order };
             }
-                return { success: false, message: data.error || "Failed to save order" };
+            
+            return { success: false, message: data.error || "Failed to save order" };
         } catch (err) {
             console.error("save order error:", err);
             return { success: false, message: "Network error" };

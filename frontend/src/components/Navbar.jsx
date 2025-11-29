@@ -6,10 +6,12 @@ import { useCart } from "../context/CartContext";
 import { UserContext } from "../context/UserContext";
 import "./styles/Navbar.css";
 
+
 export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
+  const [accountOpen, setAccountOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { cartCount, selectedStore} = useCart();
+  const { cartCount, selectedStore } = useCart();
   const { user, logout } = useContext(UserContext);
 
 
@@ -17,12 +19,12 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
   // Apply dark mode on mount and on toggle
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle("dark", darkMode);
+    root.classList.toggle("dark-mode", darkMode);
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
   const isActive = (path) =>
-  location.pathname === path ? "nav-link active" : "nav-link";
+    location.pathname === path ? "nav-link active" : "nav-link";
 
   return (
     <nav className="navbar">
@@ -34,100 +36,84 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
 
         {/* Desktop Navigation */}
         <ul className="nav-links">
-          <li>
-            <Link to="/" className={isActive("/")}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/shop" className={isActive("/shop")}>
-              Products
-            </Link>
-          </li>
-          <li>
-            <Link to="/about" className={isActive("/about")}>
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className={isActive("/contact")}>
-              Contact
-            </Link>
-          </li>
+          <li><Link to="/" className={isActive("/")}>Home</Link></li>
+          <li><Link to="/shop" className={isActive("/shop")}>Products</Link></li>
+          <li><Link to="/about" className={isActive("/about")}>About</Link></li>
+          <li><Link to="/contact" className={isActive("/contact")}>Contact</Link></li>
         </ul>
+
 
         {/* Right side buttons */}
         <div className="nav-actions">
-          {/* Store Locatore */}
-          {selectedStore ? (
-            <div className="nav-store-indicator">
-              <span className="store-label">Shopping:</span>
-              <span className="store-name">{selectedStore.name}</span>
+          {/* Store Indicator */}
+          <div className="nav-store-indicator">
+            <span className="store-label">Store:</span>
+            <span className="store-name">
+              {selectedStore ? selectedStore.name : "None Selected"}
+            </span>
+          </div>
+
+
+
+          {/* User Dropdown */}
+          {user ? (
+            <div className="user-menu">
+              <button
+                className="user-name"
+                onClick={() => setAccountOpen(!accountOpen)}
+              >
+                Hi, {user.name} ▼
+              </button>
+
+              {accountOpen && (
+                <div className="user-dropdown">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setAccountOpen(false)}
+                  >
+                    My Account
+                  </Link>
+
+                  <button onClick={logout}>Logout</button>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="nav-store-indicator">
-              <span className="store-label">Store:</span>
-              <span className="store-name">None Selected</span>
-            </div>
+            <Link to="/login" className="login-link">Login</Link>
           )}
 
           {/* Cart */}
           <button className="cart-btn" onClick={onToggleCart}>
-          🛒
+            🛒
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
 
-
-          {/* User Controls */}
-          {user ? (
-            <>
-              <span className="user-name">Hi, {user.name}</span>
-              <button onClick={logout} className="logout-btn">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="login-link">Login</Link>
-              <Link to="/register" className="register-link">Register</Link>
-            </>
-          )}
-
-          {/* Dark Mode Toggle */}
-            <button
+          {/* Dark Mode */}
+          <button
             className={`dark-toggle ${darkMode ? "active" : ""}`}
             onClick={() => setDarkMode(!darkMode)}
-            aria-label="Toggle dark mode"
           >
             <span className="toggle-thumb">
               {darkMode ? "🌑" : "🌕"}
             </span>
           </button>
 
-          {/* Mobile Menu Toggle */}
+     {/* Mobile */}
           <button
             className="mobile-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
           >
             {mobileOpen ? "✖" : "☰"}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="mobile-menu">
-          <Link to="/" className={isActive("/")}>
-            Home
-          </Link>
-          <Link to="/shop" className={isActive("/shop")}>
-            Products
-          </Link>
-          <Link to="/about" className={isActive("/about")}>
-            About
-          </Link>
-          <Link to="/contact" className={isActive("/contact")}>
-            Contact
-          </Link>
+          <Link to="/" className={isActive("/")}>Home</Link>
+          <Link to="/shop" className={isActive("/shop")}>Products</Link>
+          <Link to="/about" className={isActive("/about")}>About</Link>
+          <Link to="/contact" className={isActive("/contact")}>Contact</Link>
         </div>
       )}
     </nav>

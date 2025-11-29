@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
-import { useStore } from "../context/StoreContext";
 import StoreLocator from "../pages/StoreLocator";
 import "./styles/CartDrawer.css";
 
@@ -149,7 +148,10 @@ export default function CartDrawer({ isOpen, onClose }) {
 
               <button
                 className="checkout-btn"
-                onClick={() => navigate("/payment")}
+                onClick={() => {
+                  onClose()
+                  navigate("/payment")
+                }}
               >
                 Checkout
               </button>

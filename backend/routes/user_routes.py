@@ -66,7 +66,7 @@ def login_user():
     password = data.get("password")
 
     user = users.get(email)
-    if not user or user.get["password"] != password:
+    if not user or user.get("password") != password:
         return jsonify({"error": "Invalid credentials"}), 401
 
     # Store session info (basic demo handling)
