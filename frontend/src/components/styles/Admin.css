@@ -11,8 +11,9 @@
   flex-direction: column;
   gap: 2rem;
   }
-
-  .add-product input {
+/* Form Inputs */
+.add-product input {
+  width: 100%;
   margin: 0.35rem 0;
   padding: 0.55rem 0.8rem;
   background: var(--input-bg);
@@ -22,23 +23,28 @@
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .add-product input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 4px var(--accent);
 }
 
+/* Buttons */
+
 .admin-btn,
 .add-product button {
+  font-family: inherit;
+  font-weight: 500;
   padding: 0.55rem 1.1rem;
   margin-top: 0.5rem;
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid var(--accent);
   border-radius: 8px;
-  font-weight: 500;
   cursor: pointer;
-  transition: background 0.25s ease, transform 0.2s ease;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .admin-btn:hover,
 .add-product button:hover {
   background: var(--accent-hover);
@@ -48,14 +54,4 @@
 .admin-btn:active,
 .add-product button:active {
   transform: translateY(0);
-}
-
-.app-container.light-mode .admin-dashboard {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
-.app-container.light-mode .add-product input {
-  background: var(--input-bg);
-  border-color: var(--border-color);
 }
