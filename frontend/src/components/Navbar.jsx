@@ -18,10 +18,14 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
 
   // Apply dark mode on mount and on toggle
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark-mode", darkMode);
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
+  if (darkMode) document.body.classList.add("dark");
+  else document.body.classList.remove("dark");
+  localStorage.setItem("theme", darkMode ? "dark" : "light");
+}, [darkMode]);
+
+  useEffect(() => {
+    setAccountOpen(false);
+  }, [location.pathname]);
 
   const isActive = (path) =>
     location.pathname === path ? "nav-link active" : "nav-link";
@@ -61,12 +65,14 @@ export default function Navbar({ onToggleCart, darkMode, setDarkMode }) {
               <button
                 className="user-name"
                 onClick={() => setAccountOpen(!accountOpen)}
+                aria-expanded={accountOpen}
+                aria-control="user-dropdown"
               >
-                Hi, {user.name} ▼
+                Hi, {user.name || user.email} ▼
               </button>
 
               {accountOpen && (
-                <div className="user-dropdown">
+                <div id="user-dropdown" className="user-dropdown" role="menu">
                   <Link
                     to="/dashboard"
                     onClick={() => setAccountOpen(false)}

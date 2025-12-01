@@ -19,6 +19,15 @@ html, body, #root { height: 100%; }
   --shadow: 0 4px 10px rgba(0,0,0,0.08);
   --radius-lg: 1rem;
   --radius-md: 0.6rem;
+  --primary-500: #3b82f6;
+  --primary-600: #8b5cf6;
+  --success-500: #22c55e;
+  --success-600: #14b8a6;
+  --text-primary: #fff;
+  --surface-2: #1e1e1e;
+  --surface-3: #e5e7eb;
+  --surface-4: #d1d5db;
+
 }
 
 /* Dark theme overrides (toggle by adding .dark on body) */

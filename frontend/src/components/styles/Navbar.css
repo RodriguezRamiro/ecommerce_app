@@ -4,10 +4,13 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: #222;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
-  }
+    background: var(--card-bg);
+    color: var(--text-light);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.09);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255, 0.08);
+}
+
 
   .navbar-container {
     max-width: 1200px;
@@ -38,32 +41,57 @@
 
   .nav-link {
     text-decoration: none;
-    color: #ccc;
+    color: var(--muted);;
     font-size: 1rem;
     transition: color 0.2s ease-in-out;
   }
 
   .nav-link:hover {
-    color: #4f9cff;
+    color: var(--primary-1);
   }
 
   .nav-link.active {
-    color: #4f9cff;
-    font-weight: bold;
-    border-bottom: 2px solid #4f9cff;
+    position: relative;
+    color: var(--primary-1);
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-1);
   }
+
+  .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  margin: auto;
+  width: 70%;
+  height: 2px;
+  background: var(--primary-1);
+  border-radius: 2px;
+}
 
   .nav-actions {
     display: flex;
     align-items: center;
     gap: 12px;
   }
-
-.app-container.light-mode .navbar {
-    background: #ffffff;
-    color: #222;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+body:not(.dark) .navbar {
+  background: rgba(255,255,255,0.85);
+  color: #222;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
+
+body.dark .navbar {
+  background: rgba(17,24,39,0.75);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+
+}
+
+
+
 
 .app-container.light-mode.nav-link {
     color: #444;
@@ -102,7 +130,7 @@
   .cart-btn {
     position: relative;
     padding: 8px 14px;
-    background: #4f9cff;
+    background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
     border: none;
     border-radius: 6px;
     margin-left: 1rem;
@@ -176,17 +204,19 @@
   /* ===== Dark Mode Toggle Switch Upgrade ===== */
 
 .dark-toggle {
-  width: 30px;
+  width: 38px;
   height: 20px;
-  border-radius: 30px;
-  border: none;
-  padding: 0px;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  padding: 2px;
+  border-radius: 20px;
+  background: var(--border-color);
   position: relative;
+  transition: background 0.3s ease;
+}
+
+.toggle-thumb {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
 }
 
 .dark-toggle .toggle-thumb {
@@ -203,11 +233,11 @@
 }
 
 .dark-toggle.active {
-  background: #111827;
+  background: linear-gradient(90deg, #4f9cff, #9b59b6);
 }
 
 .dark-toggle.active .toggle-thumb {
-  transform: translateX(20px);
+  transform: translateX(18px);
   background: #1f2937;
   color: white;
 }
@@ -239,10 +269,11 @@
   position: absolute;
   right: 0;
   top: 120%;
-  background: var(--card-bg, #2a2a2a);
-  border: 1px solid var(--border-color, #444);
-  padding: 10px;
-  border-radius: 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  padding: 12x;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -256,7 +287,9 @@
   text-align: left;
   background: none;
   border: none;
-  padding: 6px 0;
+  padding: 6px 4px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
   cursor: pointer;
   font-size: 14px;
   color: var(--text-primary);
@@ -264,7 +297,8 @@
 
 .user-dropdown a:hover,
 .user-dropdown button:hover {
-  color: var(--accent);
+  background: rgba(255,255,255,0.06);
+  color: var(--primary-1);
 }
 
 .login-link {
