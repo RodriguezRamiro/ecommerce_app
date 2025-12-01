@@ -1,68 +1,14 @@
-/* === App container === */
+/* //frontend/src/App.css */
+
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* === Light Theme === */
-.light-mode {
-  background: linear-gradient(90deg, #8b5cf6, #3b82f6);
-  color: #111827;
-}
-
-.light-mode a {
-  color: #1e3a8a;
-}
-
-/* === Dark Theme === */
-.dark-mode {
-  background: linear-gradient(90deg, #111827, #1f2937);
-  color: #f9fafb;
-}
-
-.dark-mode a {
-  color: #93c5fd;
-}
-
+/* Page main padding helper (components can use .container) */
 .main-content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1.25rem;
 }
 
-/* === Buttons === */
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-block;
-  transition: 0.3s ease;
-}
-
-.button-primary {
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  color: white;
-}
-
-.button-primary:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
-}
-
-.button-secondary {
-  background: linear-gradient(90deg, #10b981, #14b8a6);
-  color: white;
-}
-
-.button-neutral {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-/* Dark override */
-.dark-mode .button-neutral {
-  background: #374151;
-  color: #f3f4f6;
-}
