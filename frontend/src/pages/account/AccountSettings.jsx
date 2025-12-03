@@ -2,6 +2,7 @@
 
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import "./styles/AccountSettings.css";
 
 export default function AccountSettings() {
     const { user, updateEmail, updatePassword } = useContext(UserContext);
