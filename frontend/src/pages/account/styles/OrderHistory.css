@@ -1,0 +1,67 @@
+/* //frontend/src/pages/account/styles/OrderHistory.css */
+
+/* Order History Page */
+
+.order-history-section {
+    padding: 24px;
+}
+
+/* Page Title */
+
+.order-history-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  /* Empty State Message */
+.order-history-empty {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 12px;
+  }
+
+
+  /* Order Card */
+.order-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+
+  .order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  }
+
+  /* Order Header */
+.order-card h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  /* Order Detail Lines */
+.order-card p {
+    color: var(--text-secondary);
+    margin: 4px 0;
+  }
+
+  /* Items List */
+.order-card ul {
+    margin-top: 12px;
+    padding-left: 20px;
+  }
+
+  .order-card li {
+    font-size: 0.95rem;
+    padding: 4px 0;
+    color: var(--text-primary);
+  }

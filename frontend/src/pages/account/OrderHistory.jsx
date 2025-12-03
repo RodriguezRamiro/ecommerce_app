@@ -7,11 +7,11 @@ export default function OrderHistory() {
     const { orderHistory } = useContext(UserContext);
 
     return (
-        <div>
-            <h2> Order History</h2>
+        <div className="order-history-section">
+            <h2 className="order-history-title"> Order History</h2>
 
             {orderHistory.length === 0 &&
-                <p> You have no past orders. </p>}
+                <p className="order-history-empty"> You have no past orders. </p>}
 
                 {orderHistory?.map((order, i) => (
                     <div key={i} className="order-card">
