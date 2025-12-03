@@ -1,18 +1,26 @@
 /* frontend/src/components/ProductGrid.css */
 
 .product-grid-section {
-    padding: 24px;
-  }
+  padding: var(--spacing-xl, 24px);
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
 
-  .product-grid-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 24px;
-  }
 
-  .product-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
+.product-grid-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text-primary, #fff);
+  letter-spacing: -0.3px;
+}
+
+
+.product-grid {
+  display: grid;
+  gap: 24px;
+
+  /* Responsive auto-fit grid */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
