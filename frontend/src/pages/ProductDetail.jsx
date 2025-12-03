@@ -33,7 +33,7 @@ export default function ProductDetail() {
         return (
         <div>
           <p className="not-found">Product not found.</p>
-        <Link to="/shop" className="back-linck">← Back to Shop</Link>";
+        <Link to="/shop" className="back-linck">← Back to Shop</Link>
         </div>
         );
       }
