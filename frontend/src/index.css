@@ -19,12 +19,20 @@ html, body, #root {
   /* Base colors */
   --bg: #f9f9f9;
   --card-bg: #ffffff;
+  --card-bg-alt: #f7f7f7;
+  --card-hover: #ececec;
+  --input-bg: #ffffff;
   --surface-2: #f3f4f6;
   --surface-3: #e5e7eb;
   --surface-4: #d1d5db;
+  --accent-hover: #0e966e;
+  --error: #ef4444;
+  --error-hover: #dc2626;
+
 
   /* Text colors */
   --text-body: #1f2937;        /* Main readable text */
+  --text-light: #ffffff;
   --text-primary: #111827;     /* Headings / strong emphasis */
   --text-secondary: #4b5563;   /* Subtext */
   --text-muted: #6b7280;       /* Low emphasis */
@@ -32,6 +40,7 @@ html, body, #root {
   /* Borders & shadows */
   --border: #e5e7eb;
   --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.08);
 
   /* Brand colors */
   --primary-1: #3b82f6;
@@ -49,14 +58,22 @@ html, body, #root {
 
 /* Dark theme overrides (toggle by adding .dark on body) */
 body.dark {
+  --accent-hover: #0fa36b;
   --bg: #111827;
   --card-bg: #1f2937;
+  --card-bg-alt: #2a2a2a;
+  --card-hover: #333333;
   --text-body: #e5e7eb;
+  --text-light: #ffffff;
   --text-primary: #ffffff;
   --text-secondary: #d1d5db;
   --text-muted: #9ca3af;
   --border: #374151;
+  --input-bg: #1f2937;
+  --shadow-lg: 0 6px 24px rgba(0,0,0,0.45);
   --shadow: 0 6px 18px rgba(0,0,0,0.45);
+  --error: #f87171;
+  --error-hover: #ef4444;
 }
 
 
