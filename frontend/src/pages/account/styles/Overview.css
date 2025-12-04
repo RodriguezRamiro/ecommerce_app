@@ -1,0 +1,47 @@
+/* /frontend/src/pages/account/styles/Overview.css */
+
+   .account-overview-section {
+    background: var(--surface-1);
+  color: var(--text-secondary);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  }
+
+  /* Page Title */
+  .account-overview-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  /* Info Text Lines */
+  .account-overview-section p {
+    margin: 8px 0;
+    color: var(--text-secondary);
+  }
+
+  .account-overview-section strong {
+    color: var(--text-secondary);
+  }
+
+  /* Section Subtitle */
+  .account-overview-subtitle {
+    font-size: 1.3rem;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  /* Store text */
+  .preferred-store {
+    color: var(--text-secondary);
+    padding: 10px 0;
+  }
+
+  .no-store {
+    color: var(--text-secondary);
+    padding: 10px 0;
+  }

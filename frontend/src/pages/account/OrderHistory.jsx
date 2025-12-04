@@ -2,6 +2,7 @@
 
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import "./styles/OrderHistory.css";
 
 export default function OrderHistory() {
     const { orderHistory } = useContext(UserContext);
