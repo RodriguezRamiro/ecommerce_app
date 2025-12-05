@@ -1,71 +1,86 @@
+/* //frontend/src/pages/styles/Contact.css */
+
+/* Contact Page Wrapper  */
 .contact-page {
     max-width: 700px;
     margin: 40px auto;
-    margin: 40px auto;
     padding: 24px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rdbg(0, 0, 0, 0.2);
-}
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
 
-.contact-page h1 {
+  /* Heading */
+  .contact-page h1 {
     text-align: center;
     margin-bottom: 12px;
-    color: 34f9cff;
-}
+    color: var(--text-primary);
+  }
 
-.contact-page p {
+  /* Subtext */
+  .contact-page p {
     text-align: center;
     margin-bottom: 24px;
-    color: #555;
-}
+    color: var(--text-secondary);
+  }
 
-.concatc-form .form-group {
+  /* Form  */
+  .contact-form .form-group {
     margin-bottom: 16px;
-}
+  }
 
-.contact-form label {
-    display: block ;
+  /*  Labels  */
+  .contact-form label {
+    display: block;
     font-weight: 600;
     margin-bottom: 6px;
-    color: #333;
-}
+    color: var(--text-primary);
+  }
 
-.contact- form input, .contact-form textarea {
+  /* Inputs & Textareas  */
+  .contact-form input,
+  .contact-form textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s;
-}
+    background: var(--input-bg);
+    color: var(--text-body);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-    border-color: #4f9cff;
-}
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: var(--primary-1);
+    box-shadow: 0 0 0 2px var(--primary-1-transparent);
+  }
 
 
+/* Submit Button  */
 .submit-btn {
     width: 100%;
     padding: 12px;
-    background: #4f9cff;
-    color: white;
+    background: var(--primary-1);
+    color: #fff;
     font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: background 0.3s
-}
+    transition: background var(--transition), transform var(--transition);
+  }
 
-.submit-btn:hover {
-    background: #3a7bd5;
-}
+  .submit-btn:hover {
+    background: var(--primary-2);
+    transform: scale(1.03);
+  }
 
-@media (max-width: 768px) {
+  /* Responsive  */
+  @media (max-width: 768px) {
     .contact-page {
-        margin: 20px;
-        padding: 16px;
+      margin: 20px;
+      padding: 16px;
     }
-}
+  }
