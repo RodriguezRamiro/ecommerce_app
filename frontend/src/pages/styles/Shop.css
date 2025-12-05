@@ -1,91 +1,111 @@
-/* src/pages/Shop.css */
+/* //frontend/src/pages/styles/Shop.css*/
+
+/* Shop COntainer */
 
 .shop-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 48px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
 
-  .shop-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
+/* Header */
 
-  .shop-title {
-    font-size: 48px;
-    font-weight: 800;
-    background: linear-gradient(90deg, #ec4899, #facc15);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+.shop-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
 
-  .shop-subtitle {
-    margin-top: 16px;
-    font-size: 18px;
-    color: #4b5563;
-  }
+/* Gradient title stays as-is (works in dark mode too) */
+.shop-title {
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ec4899, #facc15);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 16px;
-  }
+.shop-subtitle {
+  margin-top: 16px;
+  font-size: 18px;
+  color: var(--text-muted);
+}
 
-  .filter-buttons {
-    display: flex;
-    gap: 8px;
-  }
+/* Filter Bar */
 
-  .filter-button {
-    padding: 8px 16px;
-    border-radius: 8px;
-    background-color: #e5e7eb;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  .filter-button.active {
-    background: #4f9cff;
-    color: white;
-    font-weight: bold;
-  }
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
 
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
 
-  .filter-button:hover {
-    background-color: #d1d5db;
-  }
+.filter-button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
 
-  .sort-select {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    background-color: #ffffff;
-    cursor: pointer;
-  }
+.filter-button:hover {
+  background: var(--bg-hover);
+}
 
-  .shop-cta {
-    text-align: center;
-  }
+/* Active button */
+.filter-button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  font-weight: 600;
+}
 
-  .cta-button {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
-    color: white;
-    font-weight: 500;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
+/* Sort dropdown */
 
-  .cta-button:hover {
-    transform: scale(1.05);
-  }
+.sort-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sort-select:hover {
+  background: var(--bg-hover);
+}
+
+/* CTA Section */
+
+.shop-cta {
+  text-align: center;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #10b981, #14b8a6);
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
