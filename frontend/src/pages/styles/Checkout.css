@@ -1,67 +1,102 @@
-/* src/pages/Checkout.css */
+/* //frontend/src/pages/styles/Checkout.css */
+
 
 .checkout-page {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 40px 24px;
-  }
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  color: var(--text-body);
+}
 
-  .checkout-page h2 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: #eee;
-  }
+.checkout-page h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
 
-  .checkout-info {
-    color: #cecece;
-    margin-bottom: 32px;
-  }
 
-  .checkout-form {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+ /* Subtext */
+.checkout-info {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
 
-  .form-group label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 4px;
-    color: #374151;
-  }
 
-  .form-group input {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
+/* Checkout Form Card */
+.checkout-form {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: var(--transition);
+}
 
-  .form-group input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.7);
-  }
 
-  .submit-btn {
-    background: #3b82f6;
-    color: #fff;
-    font-weight: 600;
-    padding: 12px 24px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
+/* Form Fields */
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
 
-  .submit-btn:hover {
-    background: #2563eb;
-    transform: scale(1.05);
-  }
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--card-bg-alt);
+  font-size: 14px;
+  color: var(--text-body);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+
+.form-group input:focus {
+  border-color: var(--primary-1);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+
+
+/* Submit Button */
+.submit-btn {
+  background: var(--primary-1);
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+
+.submit-btn:hover {
+  background: #2563eb; /* Slight manual shade improvement */
+  transform: scale(1.05);
+}
+
+
+/* Dark Mode Adjustments (taken from theme) */
+body.dark .checkout-form {
+  background: var(--card-bg);
+}
+
+body.dark .form-group input {
+  background: var(--card-bg-alt);
+  border-color: var(--border);
+}
+
+body.dark .form-group input:focus {
+  border-color: var(--primary-1);
+}
