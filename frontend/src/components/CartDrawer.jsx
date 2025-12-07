@@ -142,9 +142,14 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <span>${total.toFixed(2)}</span>
               </div>
 
-              <Link to="/cart" className="view-cart-btn" onClick={onClose}>
+
+              <button
+                className="view-cart-btn"
+                onClick={() => { onClose(); navigate("/cart"); }}
+              >
                 View Cart
-              </Link>
+              </button>
+
 
               <button
                 className="checkout-btn"

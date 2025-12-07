@@ -28,12 +28,7 @@
   z-index: 50;
 }
 
-.cart-drawer.open {
-  transform: translateX(0);
-}
-
 /* Dark Mode */
-
 body.dark .cart-drawer {
   background: var(--bg-primary-dark, #111827);
   border-left: 1px solid rgba(255,255,255,0.08);
@@ -179,17 +174,31 @@ body.dark .cart-drawer {
 
 
   /* Use your unified button class */
-.checkout-btn,
-.view-cart-btn {
-  display: block;
-  width: 100%;
-  text-decoration: none;
-  text-align: center;
-  border-radius: 8px;
-  padding: 12px;
-  color: #fff;
-  transition: background 0.25s ease, transform 0.2s ease;
-}
+  .checkout-btn,
+  .view-cart-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: background 0.25s ease, transform 0.2s ease;
+  }
+
+
+
+  .view-cart-btn {
+    background: var(--accent, #06b58b);
+    margin-bottom: 10px;
+  }
+
+  .view-cart-btn:hover {
+    background: var(--accent-hover, #0e966e);
+  }
 
 
 .checkout-btn {
@@ -198,15 +207,6 @@ body.dark .cart-drawer {
 
 .checkout-btn:hover {
   background: linear-gradient(90deg, var(--primary-600), var(--primary-500));
-}
-
-.view-cart-btn {
-  background: linear-gradient(90deg, var(--success-500), var(--success-600));
-  margin-bottom: 10px;
-}
-
-.view-cart-btn:hover {
-  background: linear-gradient(90deg, var(--success-600), var(--success-500));
 }
 
 /* Empty Cart */
