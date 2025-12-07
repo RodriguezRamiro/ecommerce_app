@@ -2,100 +2,102 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Create Context
 const CartContext = createContext();
 
-// Hook to use CartContext easily
 export function useCart() {
   return useContext(CartContext);
 }
 
 // Provider Component
 export function CartProvider({ children }) {
-  const [drawerHasOpenedOnce, setDrawerHasOpenedOnce] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+const [cart, setCart] = useState(() => {
+  const saved = localStorage.getItem("cart");
+  return saved ? JSON.parse(saved) : [];
+});
+
+useEffect(() => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}, [cart]);
 
   // Store Selection (persisted)
   const defaultStore = {
     id: "Main00-1",
     name: "Eshop Main",
     city: "Tampa",
-    zip: 33619
- }
-
- const [selectedStore, setSelectedStore] = useState(() => {
-  const saved = localStorage.getItem("selectedStore");
-  return saved ? JSON.parse(saved) : defaultStore;
- });
-
- useEffect(() => {
-   if (!selectedStore) {
-     setSelectedStore(defaultStore);
-   }
- }, []);
-
- useEffect(() => {
-  localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
-}, [selectedStore]);
+    zip: 33619,
+  };
 
 
-
-  const [lastOrder, setLastOrder] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState(null);
+  const [selectedStore, setSelectedStore] = useState(() => {
+    const saved = localStorage.getItem("selectedStore");
+    return saved ? JSON.parse(saved) : defaultStore;
+  });
 
   useEffect(() => {
     localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
   }, [selectedStore]);
 
-  // Add product
+ useEffect(() => {
+  localStorage.setItem("selectedStore", JSON.stringify(selectedStore));
+}, [selectedStore]);
+
+const [drawerHasOpenedOnce, setDrawerHasOpenedOnce] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const addToCart = (product, qty = 1) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === product.id);
+    const isFirstItem = cart.length === 0;
+
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+
       if (existing) {
-        return prevCart.map((item) =>
+        return prev.map((item) =>
           item.id === product.id
-          ? { ...item, qty: item.qty + qty } : item
+            ? { ...item, qty: item.qty + qty }
+            : item
         );
       }
-      return [...prevCart, { ...product, qty }];
+
+      return [...prev, { ...product, qty }];
     });
 
-    if (!drawerHasOpenedOnce) {
+    // Auto-open drawer once in the entire session
+    if (isFirstItem && !drawerHasOpenedOnce) {
       setIsDrawerOpen(true);
       setDrawerHasOpenedOnce(true);
     }
   };
 
   // Remove product
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
+  const removeFromCart = (id) =>
+    setCart((prev) => prev.filter((item) => item.id !== id));
 
-  // Update quantity
-  const updateQty = (id, newQty) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
+    // Update quantity
+  const updateQty = (id, newQty) =>
+    setCart((prev) =>
+      prev.map((item) =>
         item.id === id ? { ...item, qty: Math.max(1, newQty) } : item
       )
     );
-  };
 
-  // Clear cart
+    // Clear cart
   const clearCart = () => setCart([]);
 
+
   // Totals
-  const cartCount = cart.reduce((total, item) => total + item.qty, 0);
+  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const taxRate = 0.07;
   const tax = subtotal * taxRate;
   const total = subtotal + tax;
 
+
+
   // Place Order (demo flow)
+  const [lastOrder, setLastOrder] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
+
   const placeOrder = async () => {
     if (cart.length === 0) return null;
 
@@ -126,15 +128,15 @@ export function CartProvider({ children }) {
       return orderData;
     } catch (err) {
       console.error("Order Error:", err);
-      setError("something went wrong while placing your order.");
+      setError("Something went wrong while placing your order.");
       return null;
     } finally {
       setIsProcessing(false);
     }
-    };
+  };
 
-    return (
-      <CartContext.Provider
+  return (
+    <CartContext.Provider
       value={{
         cart,
         addToCart,
@@ -155,11 +157,13 @@ export function CartProvider({ children }) {
         setSelectedStore,
         defaultStore,
         //Drawer Controls
+        drawerHasOpenedOnce,
+        setDrawerHasOpenedOnce,
         isDrawerOpen,
         setIsDrawerOpen,
       }}
     >
       {children}
-      </CartContext.Provider>
-    );
-  }
+    </CartContext.Provider>
+  );
+}

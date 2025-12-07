@@ -1,8 +1,8 @@
-//frontend/src/Button.jsx
+//frontend/src/components/Button.jsx
 
 import React from "react";
 import { Link } from "react-router-dom";
-import "./styles/Button.css";
+
 
 export default function Button({
     children,

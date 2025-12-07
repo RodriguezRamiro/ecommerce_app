@@ -39,7 +39,7 @@ export default function Home({ onAddToCart }) {
           transition={{ delay: 0.4, duration: 0.5 }}
         >
           <Link to="/shop" aria-label="Go to Shop page">
-            <Button>Shop Now</Button>
+          <button className="btn-cta">Start Shopping</button>
           </Link>
         </motion.div>
       </motion.div>
@@ -89,7 +89,7 @@ export default function Home({ onAddToCart }) {
         <section className="cta-banner">
             <h2>Upgrade Your Style Today</h2>
             <Link to="/shop" aria-label="Go to Shop">
-                <button>Start Shopping</button>
+                <button className="btn-cta">Start Shopping</button>
             </Link>
         </section>
     </div>

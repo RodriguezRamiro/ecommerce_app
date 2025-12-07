@@ -255,6 +255,18 @@ section h2 {
   margin-bottom: 24px;
 }
 
+.btn-cta {
+  background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
+  color: white;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
   .hero-title { font-size: 36px; }
