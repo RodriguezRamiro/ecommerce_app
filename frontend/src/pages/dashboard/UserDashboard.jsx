@@ -4,6 +4,7 @@ import { useState } from "react";
 import Overview from "../account/Overview";
 import OrderHistory from "../account/OrderHistory";
 import AccountSettings from "../account/AccountSettings";
+import "./styles/Dashboard.css";
 
 
 const UserDashboard = () => {

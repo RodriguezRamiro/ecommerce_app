@@ -288,6 +288,22 @@ body.dark .navbar {
   color: var(--primary-1);
 }
 
+body:not(.dark) .navbar .nav-link,
+body:not(.dark) .navbar .user-name,
+body:not(.dark) .navbar .user-dropdown a,
+body:not(.dark) .navbar .user-dropdown button,
+body:not(.dark) .navbar .login-link {
+  color: #222 !important;   /* strong readable text */
+}
+
+body:not(.dark) .navbar .user-dropdown a:hover,
+body:not(.dark) .navbar .user-dropdown button:hover {
+  background: rgba(0,0,0,0.06);
+  color: var(--primary-1) !important;
+}
+
+
+
 
 /* Mobile Menu */
 

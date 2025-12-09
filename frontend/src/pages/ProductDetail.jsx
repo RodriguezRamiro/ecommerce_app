@@ -9,6 +9,7 @@ import "./styles/ProductDetail.css";
 export default function ProductDetail() {
     const { id } = useParams();
     const { addToCart } = useCart(); // get addToCArt
+    const [added, setAdded] = useState(false);
     const [product, setProduct] = useState(null)
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ export default function ProductDetail() {
         return (
         <div>
           <p className="not-found">Product not found.</p>
-        <Link to="/shop" className="back-linck">← Back to Shop</Link>
+        <Link to="/shop" className="back-link">← Back to Shop</Link>
         </div>
         );
       }
@@ -41,12 +42,19 @@ export default function ProductDetail() {
       // Add to cart
       const handleAddToCart = () => {
         addToCart(product, quantity);
+        setAdded(true);
+        setTimeout(() => setAdded(false), 2000);
         console.log(`✅ Added ${quantity} × ${product.name} to cart`);
       };
 
 
       return (
+        <>
+          {/* Success Message */}
+          {added && <div className="status-toast">Added to Cart!</div>}
         <div className="product-detail-container">
+
+
           <Link to="/shop" className="back-link">
             ← Back to Shop
           </Link>
@@ -57,7 +65,7 @@ export default function ProductDetail() {
               <img
                 src={product.img || "https://via.placeholder.com/400x400"}
                 alt={product.name}
-              />
+                />
             </div>
 
             {/* Details */}
@@ -68,20 +76,23 @@ export default function ProductDetail() {
 
             {/* Quantity Selector */}
             <div className="quantity-selector">
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
+                <button aria-label="Decrease quantity" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>-</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity((q) => q + 1)}>+</button>
+                <button aria-label="Increase quantity" onClick={() => setQuantity((q) => q + 1)}>+</button>
             </div>
 
-            {/* Add to Cart BUtton */}
+            {/* Add to Cart Button */}
+
             <button
-            className="add-to-cart-btn"
-            onClick={handleAddToCart}
-            >
+              className="add-to-cart-btn"
+              onClick={handleAddToCart}
+              >
                 Add to Cart
             </button>
+
             </div>
         </div>
     </div>
+              </>
   );
 }

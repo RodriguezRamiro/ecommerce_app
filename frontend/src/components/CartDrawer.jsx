@@ -145,11 +145,13 @@ export default function CartDrawer({ isOpen, onClose }) {
 
               <button
                 className="view-cart-btn"
-                onClick={() => { onClose(); navigate("/cart"); }}
+                onClick={() => {
+                  onClose();
+                  navigate("/cart");
+                }}
               >
                 View Cart
               </button>
-
 
               <button
                 className="checkout-btn"

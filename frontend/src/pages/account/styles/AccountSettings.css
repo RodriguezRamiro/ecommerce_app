@@ -5,7 +5,7 @@
     margin: 0 auto;
     padding: 32px;
     border-radius: var(--radius-lg, 14px);
-    background: var(--surface-2, #1e1e1e);
+    background: var(--card-bg, var(--surface-2, #1e1e1e));
     box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,0.25));
     border: 1px solid var(--border-color, rgba(255,255,255,0.08));
     display: flex;
@@ -20,7 +20,7 @@
     font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.3px;
-    color: var(--text-primary, #fff);
+    color: var(--text-primary, #fefefe);
     border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08));
   }
 
@@ -29,7 +29,7 @@
     font-size: 0.95rem;
     font-weight: 600;
     margin-top: 6px;
-    color: var(--text-secondary, #ccc);
+    color: var(--text-secondary-strong, var(--text-secondary, #bfc4d0));
   }
 
   /* Inputs (inherits global input styles) */
@@ -38,8 +38,8 @@
     padding: var(--input-padding, 0.6rem 0.8rem);
     border-radius: var(--radius-md, 10px);
     border: 1px solid var(--border-color, rgba(255,255,255,0.1));
-    background: var(--surface-1, #141414);
-    color: var(--text-primary, #fff);
+    background: var(--surface-1, #121212);
+    color: var(--text-primary, #ffffff);
     transition: border 0.2s ease, background 0.2s ease;
   }
 
@@ -82,6 +82,7 @@
     font-size: 0.9rem;
     color: var(--text-primary, #fff);
     text-align: center;
-    background: var(--surface-3, #2a2a2a);
+    background: var(--surface-2, #222);
+    color: var(--text-primary, #ffffff);
     border: 1px solid var(--border-color, rgba(255,255,255,0.08));
   }

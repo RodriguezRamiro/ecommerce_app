@@ -159,6 +159,7 @@ body.dark .cart-drawer {
 /* Footer */
 
 .cart-footer {
+  display: block;
   padding: 16px;
   border-top: 1px solid var(--border-color);
   background: var(--card-bg);
@@ -176,7 +177,7 @@ body.dark .cart-drawer {
   /* Use your unified button class */
   .checkout-btn,
   .view-cart-btn {
-    display: flex;
+    margin: 10px;
     width: 100%;
     justify-content: center;
     border-radius: 8px;
@@ -193,7 +194,7 @@ body.dark .cart-drawer {
 
   .view-cart-btn {
     background: var(--accent, #06b58b);
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   .view-cart-btn:hover {
