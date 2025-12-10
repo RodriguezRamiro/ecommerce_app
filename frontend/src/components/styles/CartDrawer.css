@@ -66,17 +66,24 @@ body.dark .cart-drawer {
   padding: 16px;
 }
 
-.cart-item {
+.cart-item .remove-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  box-shadow: var(--shadow-sm);
-  padding: 12px;
-  margin-bottom: 14px;
-  text-align: center;
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  color: #ef4444;
+  background: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cart-item .remove-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  opacity: 1;
 }
 
 .cart-item-img {
@@ -123,7 +130,7 @@ body.dark .cart-drawer {
   height: 30px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  background: var(--surface-2);
+  background: var(--text-secondary, #d1d5db);
   color: var(--text-primary);
   cursor: pointer;
   transition: background 0.2s ease;
