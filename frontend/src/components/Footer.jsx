@@ -12,8 +12,8 @@ export default function Footer({ serverStatus }) {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <h3 className="footer-logo">RodriguezTech Solutions</h3>
-          <p>&copy; {new Date().getFullYear()} RodriguezTech. All rights reserved.</p>
+        <h3 className="footer-logo">RodriguezTech Studios&trade;</h3>
+        <p>RodriguezTech&reg; All rights reserved {new Date().getFullYear()} </p>
           <p className="status-text">
             <span className={`server-dot ${serverStatus}`}></span>
             {serverStatus === "checking"
